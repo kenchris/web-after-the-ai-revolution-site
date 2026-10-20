@@ -57,7 +57,7 @@
   function lockLandscape() { try { if (screen.orientation && screen.orientation.lock) screen.orientation.lock('landscape').catch(function () {}); } catch (x) {} }
   // When the presentation itself is already full screen, the video fills the slide instead of asking for a second full screen,
   // so the presentation never leaves full screen. The player knows (pfs) and a tap outside the video closes it.
-  var pfs = false;
+  var pfs = false, viaFull = false;
   var psty = document.createElement('style');
   psty.textContent = '.vvid.pfs{position:fixed!important;left:0!important;top:0!important;width:1920px!important;height:1080px!important;z-index:99999;border-radius:0!important;object-fit:contain;background:#000}';
   document.head.appendChild(psty);
@@ -65,6 +65,7 @@
   function setPfs(v, on) { pfs = on; v.classList.toggle('pfs', on); post({ pfs: on ? 1 : 0 }); }
   function playFull(v) {
     if (!v) return false;
+    viaFull = true;
     if (coarse) v.controls = true;
     if (pageFs()) { setPfs(v, true); var q = v.play(); if (q && q.catch) q.catch(function () {}); dbg('video fills the slide'); return true; }
     var p = v.play(); if (p && p.catch) p.catch(function () {});
@@ -77,18 +78,19 @@
   window.__playFull = playFull;
   function toggleVideo() {
     var v = document.querySelector('video.vvid'); if (!v) return;
-    if (pfs) { v.pause(); setPfs(v, false); rewind(); }
-    else if (fsEl()) { (document.exitFullscreen || document.webkitExitFullscreen).call(document); v.pause(); }
+    if (pfs) { viaFull = false; v.pause(); setPfs(v, false); rewind(); }
+    else if (fsEl()) { viaFull = false; (document.exitFullscreen || document.webkitExitFullscreen).call(document); v.pause(); }
     else playFull(v);
   }
   addEventListener('message', function (e) { if (e.data && e.data.cmd === 'video') toggleVideo(); });
   // when the video ends it leaves full screen by itself and the slide is back (the ended event does not bubble, so listen while capturing)
   document.addEventListener('ended', function (e) {
+    if (e.target && e.target.tagName === 'VIDEO' && viaFull) { viaFull = false; setTimeout(function () { post({ k: 'ArrowRight' }); }, 700); }   // a video played full screen ends on the next slide
     if (e.target && e.target.tagName === 'VIDEO' && pfs) { setPfs(e.target, false); return; }
     if (!e.target || e.target.tagName !== 'VIDEO' || !fsEl()) return;
     var ex = document.exitFullscreen || document.webkitExitFullscreen; if (ex) { try { var r = ex.call(document); if (r && r.catch) r.catch(function () {}); } catch (x) {} }
   }, true);
-  function onFs() { if (!fsEl()) { try { screen.orientation && screen.orientation.unlock && screen.orientation.unlock(); } catch (x) {} } }
+  function onFs() { if (!fsEl()) { viaFull = false; try { screen.orientation && screen.orientation.unlock && screen.orientation.unlock(); } catch (x) {} } }
   document.addEventListener('fullscreenchange', onFs); document.addEventListener('webkitfullscreenchange', onFs);
   // a tap on the video of a video slide plays it full screen (on a touch screen; with a mouse the video plays in place)
   // On a touch screen the video has no controls of its own while it sits in the slide (they would take the tap and only offer a small play button);
