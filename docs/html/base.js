@@ -45,7 +45,7 @@
   var post = function (m) { window.parent.postMessage(m, '*'); };
   var coarse = window.matchMedia && matchMedia('(pointer:coarse)').matches;
   var sty = document.createElement('style');
-  sty.textContent = 'html,body{touch-action:manipulation;-webkit-tap-highlight-color:transparent}';
+  sty.textContent = 'html,body{touch-action:none;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}';
   document.head.appendChild(sty);
   var KEYS = ['ArrowRight','ArrowLeft','ArrowUp','ArrowDown','PageDown','PageUp','Home','End',' ','Enter','Backspace','Escape','f','F','g','G','v','V','Tab'];
   addEventListener('keydown', function (e) {
@@ -81,14 +81,17 @@
     var v = e.target && e.target.closest && e.target.closest('video'); if (!v || !coarse || fsEl()) return;
     e.preventDefault(); e.stopPropagation(); playFull(v);
   }, true);
-  // taps and swipes on a touch screen: left third back, the rest forward, the top strip shows the buttons
+  // Taps and swipes on a touch screen: left third back, the rest forward, the top strip shows the buttons.
+  // The slide is drawn about a third of its size on a phone, so how far a finger moved is measured in real screen
+  // pixels (screenX, screenY), not in the slide's own pixels; touch-action none stops the browser taking a swipe as a scroll.
   var sx, sy, t0 = null;
-  addEventListener('pointerdown', function (e) { if (e.pointerType !== 'touch') return; sx = e.clientX; sy = e.clientY; t0 = Date.now(); }, { passive: true });
+  addEventListener('pointerdown', function (e) { if (e.pointerType !== 'touch' || !e.isPrimary) return; sx = e.screenX; sy = e.screenY; t0 = Date.now(); }, { passive: true });
+  addEventListener('pointercancel', function () { t0 = null; });
   addEventListener('pointerup', function (e) {
     if (e.pointerType !== 'touch' || t0 === null) return;
-    var dx = e.clientX - sx, dy = e.clientY - sy, dt = Date.now() - t0; t0 = null;
-    if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 1.5) { post({ k: dx < 0 ? 'ArrowRight' : 'ArrowLeft' }); return; }
-    if (Math.abs(dx) > 14 || Math.abs(dy) > 14 || dt > 450) return;
+    var dx = e.screenX - sx, dy = e.screenY - sy, dt = Date.now() - t0; t0 = null;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.3) { post({ k: dx < 0 ? 'ArrowRight' : 'ArrowLeft' }); return; }
+    if (Math.abs(dx) > 18 || Math.abs(dy) > 18 || dt > 700) return;
     if (e.target && e.target.closest && e.target.closest('video')) return;
     var sel = window.getSelection && String(window.getSelection()); if (sel) return;
     if (e.clientY < 110) post({ ui: 1 });
