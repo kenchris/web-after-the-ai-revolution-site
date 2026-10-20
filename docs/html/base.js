@@ -55,9 +55,18 @@
   });
   function fsEl() { return document.fullscreenElement || document.webkitFullscreenElement; }
   function lockLandscape() { try { if (screen.orientation && screen.orientation.lock) screen.orientation.lock('landscape').catch(function () {}); } catch (x) {} }
+  // When the presentation itself is already full screen, the video fills the slide instead of asking for a second full screen,
+  // so the presentation never leaves full screen. The player knows (pfs) and a tap outside the video closes it.
+  var pfs = false;
+  var psty = document.createElement('style');
+  psty.textContent = '.vvid.pfs{position:fixed!important;left:0!important;top:0!important;width:1920px!important;height:1080px!important;z-index:99999;border-radius:0!important;object-fit:contain;background:#000}';
+  document.head.appendChild(psty);
+  function pageFs() { try { var d = window.parent.document; return !!(d.fullscreenElement || d.webkitFullscreenElement); } catch (x) { return false; } }
+  function setPfs(v, on) { pfs = on; v.classList.toggle('pfs', on); post({ pfs: on ? 1 : 0 }); }
   function playFull(v) {
     if (!v) return false;
     if (coarse) v.controls = true;
+    if (pageFs()) { setPfs(v, true); var q = v.play(); if (q && q.catch) q.catch(function () {}); dbg('video fills the slide'); return true; }
     var p = v.play(); if (p && p.catch) p.catch(function () {});
     var alt = function (why) { dbg('full screen refused: ' + why); if (v.webkitEnterFullscreen) { try { v.webkitEnterFullscreen(); dbg('using the phone video player'); } catch (x) { dbg('no full screen possible: ' + x); } } };
     var rq = v.requestFullscreen || v.webkitRequestFullscreen;
@@ -68,12 +77,14 @@
   window.__playFull = playFull;
   function toggleVideo() {
     var v = document.querySelector('video.vvid'); if (!v) return;
-    if (fsEl()) { (document.exitFullscreen || document.webkitExitFullscreen).call(document); v.pause(); }
+    if (pfs) { v.pause(); setPfs(v, false); rewind(); }
+    else if (fsEl()) { (document.exitFullscreen || document.webkitExitFullscreen).call(document); v.pause(); }
     else playFull(v);
   }
   addEventListener('message', function (e) { if (e.data && e.data.cmd === 'video') toggleVideo(); });
   // when the video ends it leaves full screen by itself and the slide is back (the ended event does not bubble, so listen while capturing)
   document.addEventListener('ended', function (e) {
+    if (e.target && e.target.tagName === 'VIDEO' && pfs) { setPfs(e.target, false); return; }
     if (!e.target || e.target.tagName !== 'VIDEO' || !fsEl()) return;
     var ex = document.exitFullscreen || document.webkitExitFullscreen; if (ex) { try { var r = ex.call(document); if (r && r.catch) r.catch(function () {}); } catch (x) {} }
   }, true);
@@ -82,12 +93,12 @@
   // a tap on the video of a video slide plays it full screen (on a touch screen; with a mouse the video plays in place)
   // On a touch screen the video has no controls of its own while it sits in the slide (they would take the tap and only offer a small play button);
   // the tap starts it full screen, where the controls are on.
-  function setControls() { var v = document.querySelector('video.vvid'); if (v && coarse) v.controls = !!fsEl(); }
+  function setControls() { var v = document.querySelector('video.vvid'); if (v && coarse) v.controls = !!fsEl() || pfs; }
   // when the video is over or full screen is left, show the first picture again (an ended video on a phone can come back blank)
   function rewind() {
     var v = document.querySelector('video.vvid'); if (!v) return;
     setTimeout(function () {
-      if (fsEl()) return;
+      if (fsEl() || pfs) return;
       try { v.pause(); v.currentTime = 0.01; } catch (x) {}
       v.style.display = 'none'; void v.offsetHeight; v.style.display = ''; setControls();
     }, 250);
@@ -100,13 +111,13 @@
   var vx, vy, vt = 0;
   document.addEventListener('pointerdown', function (e) { if (e.pointerType === 'touch') { vx = e.screenX; vy = e.screenY; vt = Date.now(); } }, true);
   document.addEventListener('pointerup', function (e) {
-    if (e.pointerType !== 'touch' || !coarse || fsEl()) return;
+    if (e.pointerType !== 'touch' || !coarse || fsEl() || pfs) return;
     var v = e.target && e.target.closest && e.target.closest('video'); if (!v) return;
     if (Math.abs(e.screenX - vx) > 18 || Math.abs(e.screenY - vy) > 18 || Date.now() - vt > 700) return;
     playFull(v); dbg('tap video: full screen');
   }, true);
   document.addEventListener('click', function (e) {
-    var v = e.target && e.target.closest && e.target.closest('video'); if (!v || !coarse || fsEl()) return;
+    var v = e.target && e.target.closest && e.target.closest('video'); if (!v || !coarse || fsEl() || pfs) return;
     e.preventDefault(); e.stopPropagation(); playFull(v);
   }, true);
   // Taps and swipes on a touch screen: left third back, the rest forward, the top strip shows the buttons.
