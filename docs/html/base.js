@@ -57,6 +57,7 @@
   function lockLandscape() { try { if (screen.orientation && screen.orientation.lock) screen.orientation.lock('landscape').catch(function () {}); } catch (x) {} }
   function playFull(v) {
     if (!v) return false;
+    if (coarse) v.controls = true;
     var p = v.play(); if (p && p.catch) p.catch(function () {});
     var rq = v.requestFullscreen || v.webkitRequestFullscreen;
     if (rq) { try { var r = rq.call(v); if (r && r.then) r.then(lockLandscape, function () {}); else lockLandscape(); } catch (x) {} }
@@ -78,6 +79,18 @@
   function onFs() { if (!fsEl()) { try { screen.orientation && screen.orientation.unlock && screen.orientation.unlock(); } catch (x) {} } }
   document.addEventListener('fullscreenchange', onFs); document.addEventListener('webkitfullscreenchange', onFs);
   // a tap on the video of a video slide plays it full screen (on a touch screen; with a mouse the video plays in place)
+  // On a touch screen the video has no controls of its own while it sits in the slide (they would take the tap and only offer a small play button);
+  // the tap starts it full screen, where the controls are on.
+  function setControls() { var v = document.querySelector('video.vvid'); if (v && coarse) v.controls = !!fsEl(); }
+  setControls(); document.addEventListener('DOMContentLoaded', setControls); addEventListener('load', setControls); document.addEventListener('fullscreenchange', setControls); document.addEventListener('webkitfullscreenchange', setControls);
+  var vx, vy, vt = 0;
+  document.addEventListener('pointerdown', function (e) { if (e.pointerType === 'touch') { vx = e.screenX; vy = e.screenY; vt = Date.now(); } }, true);
+  document.addEventListener('pointerup', function (e) {
+    if (e.pointerType !== 'touch' || !coarse || fsEl()) return;
+    var v = e.target && e.target.closest && e.target.closest('video'); if (!v) return;
+    if (Math.abs(e.screenX - vx) > 18 || Math.abs(e.screenY - vy) > 18 || Date.now() - vt > 700) return;
+    playFull(v); dbg('tap video: full screen');
+  }, true);
   document.addEventListener('click', function (e) {
     var v = e.target && e.target.closest && e.target.closest('video'); if (!v || !coarse || fsEl()) return;
     e.preventDefault(); e.stopPropagation(); playFull(v);
