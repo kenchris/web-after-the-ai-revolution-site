@@ -50,6 +50,7 @@
   var KEYS = ['ArrowRight','ArrowLeft','ArrowUp','ArrowDown','PageDown','PageUp','Home','End',' ','Enter','Backspace','Escape','f','F','g','G','v','V','Tab'];
   addEventListener('keydown', function (e) {
     if (e.ctrlKey || e.metaKey || e.altKey) return;
+    if (pfs && e.key === 'Escape') { e.preventDefault(); toggleVideo(); return; }
     if (KEYS.indexOf(e.key) < 0) return;
     e.preventDefault(); post({ k: e.key, shift: e.shiftKey });
   });
@@ -72,7 +73,7 @@
   function playFull(v) {
     if (!v) return false;
     viaFull = true;
-    if (coarse) v.controls = true;
+    v.controls = true;
     if (pageFs()) { setPfs(v, true); var q = v.play(); if (q && q.catch) q.catch(function () {}); dbg('video fills the slide'); return true; }
     var p = v.play(); if (p && p.catch) p.catch(function () {});
     var alt = function (why) { dbg('full screen refused: ' + why); if (v.webkitEnterFullscreen) { try { v.webkitEnterFullscreen(); dbg('using the phone video player'); } catch (x) { dbg('no full screen possible: ' + x); } } };
@@ -101,7 +102,7 @@
   // a tap on the video of a video slide plays it full screen (on a touch screen; with a mouse the video plays in place)
   // On a touch screen the video has no controls of its own while it sits in the slide (they would take the tap and only offer a small play button);
   // the tap starts it full screen, where the controls are on.
-  function setControls() { var v = document.querySelector('video.vvid'); if (v && coarse) v.controls = !!fsEl() || pfs; }
+  function setControls() { var v = document.querySelector('video.vvid'); if (v) v.controls = !!fsEl() || pfs; }
   // when the video is over or full screen is left, show the first picture again (an ended video on a phone can come back blank)
   function rewind() {
     var v = document.querySelector('video.vvid'); if (!v) return;
@@ -116,16 +117,17 @@
   document.addEventListener('webkitfullscreenchange', function () { if (!fsEl()) rewind(); });
   document.addEventListener('webkitendfullscreen', rewind, true);
   setControls(); document.addEventListener('DOMContentLoaded', setControls); addEventListener('load', setControls); document.addEventListener('fullscreenchange', setControls); document.addEventListener('webkitfullscreenchange', setControls);
-  var vx, vy, vt = 0;
+  var vx, vy, vt = 0, lastTouch = 0;
   document.addEventListener('pointerdown', function (e) { if (e.pointerType === 'touch') { vx = e.screenX; vy = e.screenY; vt = Date.now(); } }, true);
   document.addEventListener('pointerup', function (e) {
-    if (e.pointerType !== 'touch' || !coarse || fsEl() || pfs) return;
+    if (e.pointerType !== 'touch' || fsEl() || pfs) return;
+    lastTouch = Date.now();
     var v = e.target && e.target.closest && e.target.closest('video'); if (!v) return;
     if (Math.abs(e.screenX - vx) > 18 || Math.abs(e.screenY - vy) > 18 || Date.now() - vt > 700) return;
     playFull(v); dbg('tap video: full screen');
   }, true);
   document.addEventListener('click', function (e) {
-    var v = e.target && e.target.closest && e.target.closest('video'); if (!v || !coarse || fsEl() || pfs) return;
+    var v = e.target && e.target.closest && e.target.closest('video'); if (!v || fsEl() || pfs || Date.now() - lastTouch < 800) return;
     e.preventDefault(); e.stopPropagation(); playFull(v);
   }, true);
   // Taps and swipes on a touch screen: left third back, the rest forward, the top strip shows the buttons.

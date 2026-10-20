@@ -73,7 +73,7 @@
 var N=90, cur=1, wrap=document.getElementById('wrap'), f=document.getElementById('f'), stage=document.getElementById('stage'), hud=document.getElementById('hud'), hudT, uiT, noteT, ignoreRot=false;
 var coarse=window.matchMedia&&matchMedia('(pointer:coarse)').matches;
 function pad(n){return (n<10?'0':'')+n}
-function url(n){return 'html/auto/'+pad(n)+'.html?v=20261021000350'}
+function url(n){return 'html/auto/'+pad(n)+'.html?v=20261021000442'}
 function size(){var vv=window.visualViewport;return [Math.round((vv&&vv.width)||wrap.clientWidth||innerWidth),Math.round((vv&&vv.height)||wrap.clientHeight||innerHeight)]}
 function fit(){var d=size(),w=d[0],h=d[1],s=Math.min(w/1920,h/1080);
  stage.style.transform='translate('+((w-1920*s)/2)+'px,'+((h-1080*s)/2)+'px) scale('+s+')';checkRot();if(window.holes)holes()}
@@ -111,6 +111,7 @@ function preload(){if(cur>=N)return;if(preEl)preEl.remove();var p=document.creat
 function videoCmd(){try{f.contentWindow.postMessage({cmd:'video'},'*')}catch(x){}}
 function onKey(k,e,shift){
  if(document.body.classList.contains('overview')){if(k==='Escape'||k==='g'||k==='G')overview(false);return}
+ if(pfs&&k==='Escape'){videoCmd();if(e)e.preventDefault();return}
  if(k==='Tab')show(cur+(shift?-1:1));
  else if(k==='ArrowRight'||k==='PageDown'||k===' '||k==='Enter'||k==='ArrowDown')show(cur+1);
  else if(k==='ArrowLeft'||k==='PageUp'||k==='Backspace'||k==='ArrowUp')show(cur-1);
@@ -120,6 +121,7 @@ function onKey(k,e,shift){
  else if(k==='g'||k==='G'||k==='Escape')overview();
  else return;if(e)e.preventDefault()}
 addEventListener('keydown',function(e){if(e.ctrlKey||e.metaKey||e.altKey)return;onKey(e.key,e,e.shiftKey)});
+addEventListener('click',function(e){if(pfs&&e.pointerType==='mouse')videoCmd()});
 addEventListener('selectstart',function(e){e.preventDefault()});addEventListener('contextmenu',function(e){e.preventDefault()});addEventListener('dragstart',function(e){e.preventDefault()});
 addEventListener('message',function(e){if(e.source!==f.contentWindow||!e.data)return;
  if(typeof e.data.k==='string')onKey(e.data.k,null,!!e.data.shift);else if(e.data.ui)ui();else if(e.data.dbg)dbg(e.data.dbg);else if(typeof e.data.pfs==='number')pfs=!!e.data.pfs;else if(e.data.preload)preload()});
