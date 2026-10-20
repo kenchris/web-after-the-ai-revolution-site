@@ -1,0 +1,27 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css"><link rel="stylesheet" href="../templates.css"><link rel="stylesheet" href="../diagram.css"><script src="../base.js"></script><style>
+ .row{position:absolute;left:112px;width:1000px;height:150px}
+ .cl{position:absolute;left:0;top:0;width:330px;height:150px;border-radius:20px;background:#0F1730;box-shadow:0 0 0 2px #2D3B66;padding:24px 28px;font-size:32px;font-weight:600;line-height:1.2}
+ .cl span{display:block;font-size:24px;color:var(--muted);font-weight:400;margin-top:6px}
+ .tools{position:absolute;left:1150px;top:300px;width:300px;height:560px;border-radius:26px;background:#0A2230;box-shadow:0 0 0 3px var(--cyan);padding:30px 32px;font-size:32px;line-height:1.3}
+ .tools b{display:block;font-size:34px;color:var(--cyan);margin-bottom:12px}
+ .tools .mono{font-size:23px;color:#A8F0C9;margin-top:18px}
+ .ask{position:absolute;left:1500px;width:308px;padding:18px 22px;border-radius:16px;background:rgba(255,184,77,.1);box-shadow:0 0 0 2px rgba(255,184,77,.6);font-size:26px;line-height:1.25;color:#FFE2B0}
+ .hop{position:absolute;padding:10px 18px;border-radius:12px;font-size:24px;background:#1A1640;box-shadow:0 0 0 2px rgba(139,124,255,.7);color:#D6CEFF}
+</style></head><body><div class="slide"><div class="grid"></div><div class="tagpos"><span class="tag">Act II · Agents meet the web</span></div><h2 class="head" data-edit="headline" style="font-size:76px">The browser's agent is not the only caller</h2>
+<div class="row" style="top:300px"><div class="cl">The browser's own agent<span>built in</span></div></div>
+<div class="row" style="top:490px"><div class="cl">An agent in the page<span>a script or an iframe</span></div></div>
+<div class="row" style="top:700px"><div class="cl" style="box-shadow:0 0 0 3px var(--amber)">A Web Extension<span>a side panel or a content script</span></div></div>
+<div class="hop" style="left:520px;top:712px">injects a script into the page</div>
+<div class="hop" style="left:520px;top:786px">talks to it with postMessage</div>
+<div class="tools"><b>Page tools</b>Same tools, same session<div class="mono">document.modelContext</div></div>
+<svg class="dg" viewBox="0 0 1920 1080">
+ <defs><marker id="a2" markerUnits="userSpaceOnUse" markerWidth="22" markerHeight="22" refX="18" refY="11" orient="auto"><path d="M0,0 L22,11 L0,22 z" fill="#3DD9FF"/></marker><marker id="a3" markerUnits="userSpaceOnUse" markerWidth="22" markerHeight="22" refX="18" refY="11" orient="auto"><path d="M0,0 L22,11 L0,22 z" fill="#FFB84D"/></marker></defs>
+ <line x1="448" y1="375" x2="1140" y2="375" stroke="#3DD9FF" stroke-width="5" marker-end="url(#a2)"/>
+ <line x1="448" y1="565" x2="1140" y2="565" stroke="#3DD9FF" stroke-width="5" marker-end="url(#a2)"/>
+ <path d="M448 775 H500 M900 775 H980 V820 H1140" fill="none" stroke="#FFB84D" stroke-width="5" stroke-dasharray="14 10" marker-end="url(#a3)"/>
+</svg>
+<div class="lab" style="left:1500px;top:290px;font-size:28px;color:var(--amber);font-weight:600">What we asked for</div>
+<div class="ask" style="top:340px">List and call tools without injecting a script</div>
+<div class="ask" style="top:490px">A stable identity for the document each tool belongs to</div>
+<div class="ask" style="top:660px">A change notification that reaches the extension</div>
+</div></body></html>

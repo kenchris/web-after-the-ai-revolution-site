@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Web After the AI Revolution</title>
+<style>
+ html,body{margin:0;height:100%;background:#05080F;color:#C9D3E8;font-family:"Segoe UI",system-ui,sans-serif;overflow:hidden}
+ #stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:0 0;background:#0B1020}
+ #stage iframe{position:absolute;inset:0;width:1920px;height:1080px;border:0;background:#0B1020}
+ #bar{position:fixed;left:0;right:0;bottom:0;height:4px;background:#121A33}
+ #bar i{display:block;height:100%;width:0;background:#3DD9FF;transition:width .2s}
+ #hud{position:fixed;right:14px;bottom:12px;font-size:14px;opacity:0;transition:opacity .3s;background:rgba(5,8,15,.8);padding:6px 10px;border-radius:8px}
+ body.show #hud{opacity:1}
+ #grid{position:fixed;inset:0;background:#05080F;overflow:auto;display:none;padding:24px;box-sizing:border-box}
+ body.overview #grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px}
+ body.overview #stage{display:none}
+ .th{position:relative;aspect-ratio:16/9;overflow:hidden;border-radius:10px;box-shadow:0 0 0 2px #24304F;cursor:pointer;background:#0B1020}
+ .th.cur{box-shadow:0 0 0 3px #3DD9FF}
+ .th iframe{position:absolute;left:0;top:0;width:1920px;height:1080px;border:0;transform-origin:0 0;pointer-events:none}
+ .th b{position:absolute;right:8px;bottom:6px;font-size:13px;background:rgba(5,8,15,.8);padding:2px 7px;border-radius:6px}
+</style></head><body>
+<div id="stage"><iframe id="f" title="slide"></iframe></div>
+<div id="grid"></div>
+<div id="bar"><i id="p"></i></div>
+<div id="hud"></div>
+<script>
+var N=90, cur=1, f=document.getElementById('f'), stage=document.getElementById('stage'), hud=document.getElementById('hud'), hudT;
+function pad(n){return (n<10?'0':'')+n}
+function url(n){return 'html/auto/'+pad(n)+'.html'}
+function fit(){var s=Math.min(innerWidth/1920,innerHeight/1080);stage.style.transform='scale('+s+') translate(-50%,-50%)'}
+function show(n){cur=Math.max(1,Math.min(N,n));f.src=url(cur);document.getElementById('p').style.width=(cur/N*100)+'%';
+ history.replaceState(null,'','#'+cur);hud.textContent=cur+' / '+N;document.body.classList.add('show');clearTimeout(hudT);hudT=setTimeout(function(){document.body.classList.remove('show')},1500)}
+function overview(on){var b=document.body,g=document.getElementById('grid');
+ if(on===undefined)on=!b.classList.contains('overview');
+ if(on){g.innerHTML='';for(var i=1;i<=N;i++){(function(i){var d=document.createElement('div');d.className='th'+(i==cur?' cur':'');
+  var fr=document.createElement('iframe');fr.loading='lazy';fr.src=url(i);d.appendChild(fr);var l=document.createElement('b');l.textContent=i;d.appendChild(l);
+  d.onclick=function(){overview(false);show(i)};g.appendChild(d)})(i)}
+  b.classList.add('overview');requestAnimationFrame(function(){var th=g.querySelector('.th');var s=th.clientWidth/1920;
+   g.querySelectorAll('iframe').forEach(function(x){x.style.transform='scale('+s+')'});var c=g.querySelector('.cur');c&&c.scrollIntoView({block:'center'})})}
+ else b.classList.remove('overview')}
+function onKey(k,e){
+ if(document.body.classList.contains('overview')){if(k==='Escape'||k==='g'||k==='G')overview(false);return}
+ if(k==='ArrowRight'||k==='PageDown'||k===' '||k==='Enter'||k==='ArrowDown')show(cur+1);
+ else if(k==='ArrowLeft'||k==='PageUp'||k==='Backspace'||k==='ArrowUp')show(cur-1);
+ else if(k==='Home')show(1);else if(k==='End')show(N);
+ else if(k==='f'||k==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+ else if(k==='g'||k==='G'||k==='Escape')overview();
+ else return;if(e)e.preventDefault()}
+addEventListener('keydown',function(e){onKey(e.key,e)});
+addEventListener('message',function(e){if(e.source===f.contentWindow&&e.data&&typeof e.data.k==='string')onKey(e.data.k)});
+var tx=null;addEventListener('touchstart',function(e){tx=e.touches[0].clientX});
+addEventListener('touchend',function(e){if(tx===null)return;var d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>50)show(cur+(d<0?1:-1));tx=null});
+f.addEventListener('load',function(){window.focus()});
+addEventListener('resize',fit);fit();
+show(parseInt(location.hash.slice(1))||1);
+</script></body></html>

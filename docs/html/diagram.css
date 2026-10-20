@@ -1,0 +1,14 @@
+/* Shared parts for hand-made diagrams (1920 x 1080, content area below y = 270) */
+.dg{position:absolute;left:0;top:0;width:1920px;height:1080px}
+.nd{position:absolute;border-radius:20px;background:#0F1730;box-shadow:0 0 0 2px #2D3B66;padding:22px 28px;font-size:30px;line-height:1.25}
+.nd b{display:block;font-size:34px;font-weight:600;margin-bottom:6px}
+.nd .m{display:block;color:var(--muted);font-size:26px}
+.nd.cy{box-shadow:0 0 0 3px var(--cyan)} .nd.am{box-shadow:0 0 0 3px var(--amber)} .nd.vi{box-shadow:0 0 0 3px var(--violet)} .nd.gr{box-shadow:0 0 0 3px var(--green)}
+.nd.cyf{background:#0A2230} .nd.amf{background:#2A1D0A} .nd.vif{background:#1A1640}
+.chip{position:absolute;padding:10px 24px;border-radius:999px;font-size:26px;font-weight:600;letter-spacing:.3px;background:rgba(61,217,255,.12);color:var(--cyan);border:2px solid rgba(61,217,255,.5)}
+.chip.am{background:rgba(255,184,77,.12);color:var(--amber);border-color:rgba(255,184,77,.55)}
+.chip.vi{background:rgba(139,124,255,.14);color:#B7ACFF;border-color:rgba(139,124,255,.55)}
+.chip.mu{background:rgba(138,151,177,.12);color:#B9C5DD;border-color:rgba(138,151,177,.45)}
+.lab{position:absolute;font-size:26px;color:var(--muted);letter-spacing:.3px}
+.big{position:absolute;font-size:40px;font-weight:600}
+.mono{font-family:Consolas,'Cascadia Mono',monospace}

@@ -1,0 +1,19 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css"><link rel="stylesheet" href="../templates.css"><link rel="stylesheet" href="../diagram.css"><script src="../base.js"></script><style>
+ .lbl{position:absolute;font-size:30px;font-weight:600;text-align:center;width:360px}
+ .sub{position:absolute;font-size:26px;color:var(--muted);text-align:center;width:360px}
+ .ax{position:absolute;left:112px;top:930px;font-size:26px;color:var(--muted)}
+</style></head><body><div class="slide"><div class="grid"></div><div class="tagpos"><span class="tag">Act III · How an agent remembers</span></div><h2 class="head" data-edit="headline" style="font-size:76px">The middle of a long prompt is the easiest to lose</h2>
+<svg class="dg" viewBox="0 0 1920 1080"><defs>
+ <linearGradient id="vg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3DD9FF"/><stop offset=".5" stop-color="#FFB84D"/><stop offset="1" stop-color="#3DD9FF"/></linearGradient>
+ <linearGradient id="vf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3DD9FF" stop-opacity=".30"/><stop offset="1" stop-color="#3DD9FF" stop-opacity="0"/></linearGradient></defs>
+ <line x1="160" y1="860" x2="1780" y2="860" stroke="#2D3B66" stroke-width="3"/>
+ <line x1="160" y1="330" x2="160" y2="860" stroke="#2D3B66" stroke-width="3"/>
+ <path d="M160 860 L160 380 C 320 360, 420 400, 560 560 C 700 700, 760 740, 970 750 C 1180 740, 1240 700, 1380 560 C 1520 400, 1620 360, 1780 380 L1780 860 Z" fill="url(#vf)"/>
+ <path d="M160 380 C 320 360, 420 400, 560 560 C 700 700, 760 740, 970 750 C 1180 740, 1240 700, 1380 560 C 1520 400, 1620 360, 1780 380" fill="none" stroke="url(#vg)" stroke-width="8" stroke-linecap="round"/>
+ <rect x="560" y="330" width="820" height="530" fill="none" stroke="#FFB84D" stroke-width="3" stroke-dasharray="12 12" opacity=".0"/>
+</svg>
+<div class="lbl" style="left:120px;top:880px;color:var(--cyan)">The start</div><div class="sub" style="left:120px;top:920px">instructions, tool list</div>
+<div class="lbl" style="left:790px;top:790px;color:var(--amber)">The middle</div><div class="sub" style="left:790px;top:830px">facts are easiest to lose</div>
+<div class="lbl" style="left:1420px;top:880px;color:var(--cyan)">The end</div><div class="sub" style="left:1420px;top:920px">the latest turns</div>
+<div class="lab" style="left:112px;top:300px">How much attention the model pays</div>
+<div class="src" data-edit="source">Liu et al., "Lost in the Middle: How Language Models Use Long Contexts", 2023.</div></div></body></html>

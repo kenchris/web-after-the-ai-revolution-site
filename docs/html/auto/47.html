@@ -1,0 +1,39 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css"><link rel="stylesheet" href="../templates.css"><link rel="stylesheet" href="../diagram.css"><script src="../base.js"></script><style>
+ .rowl{position:absolute;left:112px;width:300px;font-size:32px;font-weight:600;line-height:1.2}
+ .rowl span{display:block;font-size:24px;color:var(--muted);font-weight:400;margin-top:4px}
+ .seg{position:absolute;height:104px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:600;color:#06202A;text-align:center;line-height:1.1}
+ .re{background:linear-gradient(90deg,#1C9CC4,#3DD9FF)}
+ .nw{background:linear-gradient(90deg,#E08A1E,#FFB84D);color:#2A1500}
+ .leg{position:absolute;top:960px;font-size:28px;color:#C9D3E8}
+ .sw{display:inline-block;width:30px;height:30px;border-radius:8px;vertical-align:-5px;margin-right:12px}
+</style></head><body><div class="slide"><div class="grid"></div><div class="tagpos"><span class="tag">Act III · On-device intelligence</span></div><h2 class="head" data-edit="headline" style="font-size:76px">The prompt start is reused, tool loops too</h2>
+<div class="rowl" style="top:322px">Turn 1<span>everything is new</span></div>
+<div class="seg nw" style="left:440px;top:300px;width:170px">Instructions</div>
+<div class="seg nw" style="left:618px;top:300px;width:170px">Tools</div>
+<div class="seg nw" style="left:796px;top:300px;width:210px">Message 1</div>
+
+<div class="rowl" style="top:492px">Tool loop, step 2<span>the model called a tool</span></div>
+<div class="seg re" style="left:440px;top:470px;width:170px">Instructions</div>
+<div class="seg re" style="left:618px;top:470px;width:170px">Tools</div>
+<div class="seg re" style="left:796px;top:470px;width:210px">Message 1</div>
+<div class="seg nw" style="left:1014px;top:470px;width:150px">Tool call 1</div>
+<div class="seg nw" style="left:1172px;top:470px;width:170px">Result 1</div>
+
+<div class="rowl" style="top:662px">Tool loop, step 3<span>and again</span></div>
+<div class="seg re" style="left:440px;top:640px;width:170px">Instructions</div>
+<div class="seg re" style="left:618px;top:640px;width:170px">Tools</div>
+<div class="seg re" style="left:796px;top:640px;width:210px">Message 1</div>
+<div class="seg re" style="left:1014px;top:640px;width:150px">Tool call 1</div>
+<div class="seg re" style="left:1172px;top:640px;width:170px">Result 1</div>
+<div class="seg nw" style="left:1350px;top:640px;width:150px">Tool call 2</div>
+<div class="seg nw" style="left:1508px;top:640px;width:170px">Result 2</div>
+
+<div class="rowl" style="top:832px">The tool list changed<span>everything after it is new</span></div>
+<div class="seg re" style="left:440px;top:810px;width:170px">Instructions</div>
+<div class="seg nw" style="left:618px;top:810px;width:170px">Tools</div>
+<div class="seg nw" style="left:796px;top:810px;width:210px">Message 1</div>
+<div class="seg nw" style="left:1014px;top:810px;width:150px">Tool call 1</div>
+<div class="seg nw" style="left:1172px;top:810px;width:170px">Result 1</div>
+<div class="leg" style="left:440px"><span class="sw" style="background:#3DD9FF"></span>Reused from the step before</div>
+<div class="leg" style="left:980px"><span class="sw" style="background:#FFB84D"></span>Computed again</div>
+<div class="src" data-edit="source">How prefix caching works in local and hosted serving stacks.</div></div></body></html>

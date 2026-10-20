@@ -1,0 +1,35 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css"><link rel="stylesheet" href="../templates.css"><link rel="stylesheet" href="../diagram.css"><script src="../base.js"></script><style>
+ .panel{position:absolute;top:300px;height:560px;border-radius:28px;background:rgba(18,26,51,.85);box-shadow:0 0 0 2px #24304F}
+ .panel h4{position:absolute;left:36px;top:26px;font-size:30px;letter-spacing:3px;text-transform:uppercase;font-weight:600}
+ .tool{position:absolute;left:36px;right:36px;height:104px;border-radius:16px;background:#0A2230;box-shadow:0 0 0 2px rgba(61,217,255,.6);padding:18px 24px;font-size:30px}
+ .tool span{display:block;color:var(--muted);font-size:24px;margin-top:2px}
+ .reg{position:absolute;left:36px;right:36px;top:110px;height:100px;border-radius:16px;background:#1A1640;box-shadow:0 0 0 2px rgba(139,124,255,.7);padding:20px 24px;font-size:28px}
+ .stat{position:absolute;left:36px;right:36px;font-size:28px;color:#C9D3E8}
+</style></head><body><div class="slide"><div class="grid"></div><div class="tagpos"><span class="tag">Act II · Agents meet the web</span></div><h2 class="head" data-edit="headline" style="font-size:88px">WebMCP: the page offers tools</h2>
+<div class="panel" style="left:112px;width:520px"><h4 style="color:var(--cyan)">The page</h4>
+ <div class="tool mono" style="top:100px">search_catalog<span>reads, returns items</span></div>
+ <div class="tool mono" style="top:230px">add_item<span>changes the list</span></div>
+ <div class="tool mono" style="top:360px">checkout<span>consequential</span></div>
+ <div class="lab" style="left:36px;top:490px">registerTool( ... )</div>
+</div>
+<div class="panel" style="left:700px;width:520px"><h4 style="color:#B7ACFF">The browser</h4>
+ <div class="reg mono">document.modelContext</div>
+ <div class="stat" style="top:250px">Keeps the list of tools for each page</div>
+ <div class="stat" style="top:330px">Enforces origins and permissions</div>
+ <div class="stat" style="top:410px">Hands the list to an agent on request</div>
+</div>
+<div class="panel" style="left:1288px;width:520px"><h4 style="color:var(--amber)">The agent</h4>
+ <div class="tool mono" style="top:100px;background:#2A1D0A;box-shadow:0 0 0 2px rgba(255,184,77,.7)">getTools()<span>what can this page do?</span></div>
+ <div class="tool mono" style="top:230px;background:#2A1D0A;box-shadow:0 0 0 2px rgba(255,184,77,.7)">executeTool(...)<span>typed input, JSON back</span></div>
+ <div class="stat" style="top:380px">The model chooses. The browser carries it out in the user's own tab.</div>
+</div>
+<svg class="dg" viewBox="0 0 1920 1080">
+ <defs><marker id="a1" markerUnits="userSpaceOnUse" markerWidth="22" markerHeight="22" refX="18" refY="11" orient="auto"><path d="M0,0 L22,11 L0,22 z" fill="#8A97B1"/></marker></defs>
+ <line x1="636" y1="580" x2="696" y2="580" stroke="#8A97B1" stroke-width="5" marker-end="url(#a1)"/>
+ <line x1="1224" y1="580" x2="1284" y2="580" stroke="#8A97B1" stroke-width="5" marker-end="url(#a1)"/>
+</svg>
+<div class="chip" style="left:112px;top:900px">W3C Web ML Community Group</div>
+<div class="chip vi" style="left:560px;top:900px">Draft Community Group Report</div>
+<div class="chip am" style="left:1030px;top:900px">Chrome origin trial</div>
+<div class="chip mu mono" style="left:1350px;top:900px">document.modelContext</div>
+<div class="src" data-edit="source">W3C Web Machine Learning Community Group, Draft Community Group Report. Chrome origin trial.</div></div></body></html>

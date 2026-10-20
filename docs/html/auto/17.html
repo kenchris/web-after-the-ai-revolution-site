@@ -1,0 +1,6 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css"><link rel="stylesheet" href="../templates.css"><link rel="stylesheet" href="../diagram.css"><script src="../base.js"></script></head><body><div class="slide"><div class="grid"></div><div class="tagpos"><span class="tag">Act II · Agents meet the web</span></div><h2 class="head" data-edit="headline" style="font-size:66px">The agent lists and calls</h2><div class="codebox"><pre style="font-size:36px"><span class="k">const</span> tools = <span class="k">await</span> document.modelContext.<span class="f">getTools</span>();
+<span class="c">// name, title, description, inputSchema, origin, annotations</span>
+
+<span class="k">const</span> result = <span class="k">await</span> document.modelContext
+  .<span class="f">executeTool</span>(tools[0], { title: <span class="s">"Milk"</span> });
+<span class="c">// a JSON string: &#x27;{&quot;ok&quot;:true,&quot;count&quot;:4}&#x27;</span></pre></div><div class="codecap" data-edit="caption">Same session, same cookies. No new login for the agent.</div><div class="src" data-edit="source">WebMCP draft, <code>getTools</code> and <code>executeTool</code>.</div></div></body></html>

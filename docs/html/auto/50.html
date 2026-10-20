@@ -1,0 +1,28 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css"><link rel="stylesheet" href="../templates.css"><link rel="stylesheet" href="../diagram.css"><script src="../base.js"></script><style>
+ .t{position:absolute;font-size:28px;line-height:1.25}
+ .t b{display:block;font-size:30px;margin-bottom:4px;font-weight:600}
+ .t span{color:#B9C5DD;font-size:25px}
+</style></head><body><div class="slide"><div class="grid"></div><div class="tagpos"><span class="tag">Act III · How an agent remembers</span></div><h2 class="head" data-edit="headline" style="font-size:88px">Fill half, grow, then compact</h2>
+<svg class="dg" viewBox="0 0 1920 1080">
+ <defs><marker id="ac" markerUnits="userSpaceOnUse" markerWidth="20" markerHeight="20" refX="16" refY="10" orient="auto"><path d="M0,0 L20,10 L0,20 z" fill="#FFB84D"/></marker></defs>
+ <!-- axes: x 200..1780 (turns), y 880 = 0 %, 320 = 100 % -->
+ <line x1="200" y1="880" x2="1780" y2="880" stroke="#2D3B66" stroke-width="3"/>
+ <line x1="200" y1="320" x2="200" y2="880" stroke="#2D3B66" stroke-width="3"/>
+ <g fill="#8A97B1" font-family="Segoe UI" font-size="24" text-anchor="end"><text x="184" y="886">0</text><text x="184" y="600">50%</text><text x="184" y="326">100%</text></g>
+ <line x1="200" y1="432" x2="1780" y2="432" stroke="#FF6B7A" stroke-width="3" stroke-dasharray="14 10"/>
+ <text x="1780" y="418" fill="#FF6B7A" font-family="Segoe UI" font-size="26" text-anchor="end">80%: time to compact</text>
+ <line x1="200" y1="600" x2="1780" y2="600" stroke="#2D3B66" stroke-width="2" stroke-dasharray="6 10"/>
+ <!-- the first fill and growth: 50 % -> 80 % over turns 1..9 -->
+ <path d="M240 600 L240 600 L1000 440" fill="none" stroke="#3DD9FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+ <line x1="1000" y1="440" x2="1000" y2="636" stroke="#FFB84D" stroke-width="9" stroke-linecap="round" stroke-dasharray="2 16"/>
+ <path d="M1000 440 L1000 636" fill="none" stroke="#FFB84D" stroke-width="7" marker-end="url(#ac)"/>
+ <path d="M1000 636 L1760 450" fill="none" stroke="#3DD9FF" stroke-width="9" stroke-linecap="round"/>
+ <circle cx="240" cy="600" r="14" fill="#3DD9FF"/><circle cx="1000" cy="440" r="12" fill="#FFB84D"/><circle cx="1000" cy="636" r="12" fill="#3DD9FF"/>
+</svg>
+<div class="t" style="left:230px;top:640px;width:420px"><b style="color:var(--cyan)">1. Fill about half</b><span>so the model knows what the conversation is about</span></div>
+<div class="t" style="left:420px;top:332px;width:500px"><b style="color:var(--cyan)">2. Grow</b><span>each turn is appended, so the start stays cached and fast</span></div>
+<div class="t" style="left:1040px;top:690px;width:520px"><b style="color:var(--amber)">3. Compact</b><span>fold the old turns into a summary: one cache miss, then growth again</span></div>
+<div class="lab" style="left:200px;top:900px">Turns in the conversation, left to right</div>
+<div class="lab" style="left:200px;top:290px">How full the context window is</div>
+<div class="t" style="left:1120px;top:910px;width:690px;color:#FF9AA4">Trimming every turn instead would miss the cache every turn.</div>
+<div class="src" data-edit="source">Our open-source agent runtime. The thresholds are settings, not laws: about half to start, 80% to compact. The loaded model writes the summary.</div></div></body></html>

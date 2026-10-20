@@ -1,0 +1,31 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css"><link rel="stylesheet" href="../templates.css"><link rel="stylesheet" href="../diagram.css"><script src="../base.js"></script><style>
+ .ln{position:absolute;left:112px;width:520px;font-size:32px;font-weight:600;line-height:1.2}
+ .ln span{display:block;font-size:26px;color:var(--muted);font-weight:400;margin-top:4px}
+ .res{position:absolute;font-size:28px;font-weight:600}
+</style></head><body><div class="slide"><div class="grid"></div><div class="tagpos"><span class="tag">Act V · Putting it together</span></div><h2 class="head" data-edit="headline" style="font-size:88px">Quiet calls get cut</h2>
+<div class="ln" style="top:340px">Client A<span>100 s call, no progress</span></div>
+<div class="ln" style="top:550px">Client A<span>200 s call, progress every 20 s</span></div>
+<div class="ln" style="top:760px">Client B<span>progress every 10 s</span></div>
+<svg class="dg" viewBox="0 0 1920 1080">
+ <!-- axis: 0 s at x=700, 7 px per second, 200 s at x=2100 would overflow, so 5.6 px per second: 200 s = 1120 -->
+ <g stroke="#2D3B66" stroke-width="2"><line x1="700" y1="300" x2="700" y2="900"/><line x1="1036" y1="300" x2="1036" y2="900"/><line x1="1372" y1="300" x2="1372" y2="900"/><line x1="1708" y1="300" x2="1708" y2="900"/><line x1="1820" y1="300" x2="1820" y2="900"/></g>
+ <g fill="#8A97B1" font-family="Segoe UI" font-size="26" text-anchor="middle"><text x="700" y="930">0 s</text><text x="1036" y="930">60 s</text><text x="1372" y="930">120 s</text><text x="1708" y="930">180 s</text><text x="1820" y="930">200 s</text></g>
+ <!-- lane 1 -->
+ <rect x="700" y="352" width="336" height="44" rx="10" fill="#FFB84D"/>
+ <g stroke="#FF6B7A" stroke-width="8" stroke-linecap="round"><line x1="1056" y1="350" x2="1086" y2="398"/><line x1="1086" y1="350" x2="1056" y2="398"/></g>
+ <!-- lane 2 -->
+ <rect x="700" y="562" width="1120" height="44" rx="10" fill="#4ADE80"/>
+ <g fill="#06202A"><circle cx="812" cy="584" r="8"/><circle cx="924" cy="584" r="8"/><circle cx="1036" cy="584" r="8"/><circle cx="1148" cy="584" r="8"/><circle cx="1260" cy="584" r="8"/><circle cx="1372" cy="584" r="8"/><circle cx="1484" cy="584" r="8"/><circle cx="1596" cy="584" r="8"/><circle cx="1708" cy="584" r="8"/></g>
+ <!-- lane 3 -->
+ <rect x="700" y="772" width="1008" height="44" rx="10" fill="#FFB84D"/>
+ <g fill="#2A1500" id="dots"></g>
+ <g stroke="#FF6B7A" stroke-width="8" stroke-linecap="round"><line x1="1728" y1="770" x2="1758" y2="818"/><line x1="1758" y1="770" x2="1728" y2="818"/></g>
+</svg>
+<div class="res" style="left:1110px;top:350px;color:var(--red)">Closed at 60 s</div>
+<div class="res" style="left:700px;top:620px;color:var(--green)">Finished. Each report keeps the call alive</div>
+<div class="res" style="left:1190px;top:830px;color:var(--red)">Closed at 180 s, even with progress</div>
+<script>
+ const g=document.getElementById('dots');
+ for(let s=10;s<=170;s+=10){const c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('cx',700+s*5.6);c.setAttribute('cy',794);c.setAttribute('r',6);g.appendChild(c)}
+</script>
+<div class="src" data-edit="source">Our probes of two MCP clients, October 2026. Client versions change, so these are a snapshot.</div></div></body></html>

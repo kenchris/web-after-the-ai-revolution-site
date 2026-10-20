@@ -1,0 +1,25 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css"><link rel="stylesheet" href="../templates.css"><link rel="stylesheet" href="../diagram.css"><script src="../base.js"></script><style>
+ .rowl{position:absolute;left:112px;width:420px;font-size:36px;font-weight:600;line-height:1.2}
+ .rowl span{display:block;font-size:26px;color:var(--muted);font-weight:400;margin-top:6px}
+ .blk{position:absolute;height:130px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:600;text-align:center;line-height:1.15}
+ .eph{background:#2A1D0A;box-shadow:0 0 0 3px var(--amber);color:#FFD9A0}
+ .msg{background:#0A2230;box-shadow:0 0 0 3px var(--cyan);color:#A8F0C9}
+ .gh{background:transparent;box-shadow:0 0 0 3px #3A4670;color:#5B6890;border:0;outline:3px dashed #3A4670;outline-offset:-3px}
+ .note{position:absolute;left:112px;right:112px;font-size:38px;color:#C9D3E8;line-height:1.35}
+ .note b{color:var(--text)}
+</style></head><body><div class="slide"><div class="grid"></div><div class="tagpos"><span class="tag">Act III · On-device intelligence</span></div><h2 class="head" data-edit="headline" style="font-size:76px">Ephemeral data: sent for this turn, not saved</h2>
+<div class="rowl" style="top:330px">Sent to the model<span>for this turn</span></div>
+<div class="blk eph" style="left:560px;top:322px;width:260px">The date</div>
+<div class="blk eph" style="left:836px;top:322px;width:300px">Page state</div>
+<div class="blk eph" style="left:1152px;top:322px;width:300px">The selection</div>
+<div class="blk msg" style="left:1468px;top:322px;width:340px">Your message</div>
+
+<div class="rowl" style="top:560px">Saved in history<span>and replayed every turn</span></div>
+<div class="blk gh" style="left:560px;top:552px;width:260px">left out</div>
+<div class="blk gh" style="left:836px;top:552px;width:300px">left out</div>
+<div class="blk gh" style="left:1152px;top:552px;width:300px">left out</div>
+<div class="blk msg" style="left:1468px;top:552px;width:340px">Your message</div>
+
+<div class="note" style="top:780px"><b>Ephemeral context</b> goes out with the request and is not kept. It goes stale at once, and keeping every copy would fill the context and break the reuse on the previous slide.</div>
+<div class="note" style="top:930px;font-size:32px;color:var(--muted)">A tool result is the opposite: it stays in the history.</div>
+</div></body></html>

@@ -1,0 +1,32 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css"><link rel="stylesheet" href="../templates.css"><link rel="stylesheet" href="../diagram.css"><script src="../base.js"></script><style>
+ .ll{position:absolute;top:290px;width:360px;height:84px;white-space:nowrap;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:38px;font-weight:600}
+ .m{position:absolute;font-family:Consolas,'Cascadia Mono',monospace;font-size:28px;text-align:center;width:640px}
+ .why{position:absolute;font-size:26px;color:var(--muted)}
+</style></head><body><div class="slide"><div class="grid"></div><div class="tagpos"><span class="tag">Act IV · MCP Apps</span></div><h2 class="head" data-edit="headline" style="font-size:88px">Host and app talk over postMessage</h2>
+<div class="ll" style="left:260px;background:#0A2230;box-shadow:0 0 0 3px var(--cyan);color:var(--cyan)">Host</div>
+<div class="ll" style="left:1230px;width:500px;background:#1A1640;box-shadow:0 0 0 3px var(--violet);color:#B7ACFF">App · sandboxed frame</div>
+<svg class="dg" viewBox="0 0 1920 1080"><defs>
+ <marker id="r" markerUnits="userSpaceOnUse" markerWidth="22" markerHeight="22" refX="18" refY="11" orient="auto"><path d="M0,0 L22,11 L0,22 z" fill="#8A97B1"/></marker>
+ <marker id="l" markerUnits="userSpaceOnUse" markerWidth="22" markerHeight="22" refX="4" refY="11" orient="auto"><path d="M22,0 L0,11 L22,22 z" fill="#8A97B1"/></marker></defs>
+ <line x1="440" y1="374" x2="440" y2="1000" stroke="#2D3B66" stroke-width="4" stroke-dasharray="10 10"/>
+ <line x1="1480" y1="374" x2="1480" y2="1000" stroke="#2D3B66" stroke-width="4" stroke-dasharray="10 10"/>
+ <g stroke-width="5" stroke="#8A97B1">
+  <line x1="1470" y1="440" x2="450" y2="440" marker-end="url(#l)"/>
+  <line x1="450" y1="512" x2="1470" y2="512" marker-end="url(#r)" stroke="#3DD9FF"/>
+  <line x1="1470" y1="584" x2="450" y2="584" marker-end="url(#l)"/>
+  <line x1="450" y1="656" x2="1470" y2="656" marker-end="url(#r)" stroke="#3DD9FF"/>
+  <line x1="450" y1="728" x2="1470" y2="728" marker-end="url(#r)" stroke="#3DD9FF"/>
+  <line x1="1470" y1="800" x2="450" y2="800" marker-end="url(#l)" stroke="#B7ACFF"/>
+  <line x1="1470" y1="872" x2="450" y2="872" marker-end="url(#l)" stroke="#B7ACFF"/>
+  <line x1="1470" y1="944" x2="450" y2="944" marker-end="url(#l)" stroke="#FFB84D"/>
+ </g></svg>
+<div class="m" style="left:640px;top:396px;color:#E6ECF8">ui/initialize</div>
+<div class="m" style="left:640px;top:468px;color:#A8F0C9">host context: theme, locale, size</div>
+<div class="m" style="left:640px;top:540px;color:#E6ECF8">ui/notifications/initialized</div>
+<div class="m" style="left:640px;top:612px;color:#A8F0C9">tool-input</div>
+<div class="m" style="left:640px;top:684px;color:#A8F0C9">tool-result</div>
+<div class="m" style="left:640px;top:756px;color:#D6CEFF">tools/call</div>
+<div class="m" style="left:640px;top:828px;color:#D6CEFF">ui/update-model-context</div>
+<div class="m" style="left:640px;top:900px;color:#FFD9A0">ui/message</div>
+<div class="why" style="left:1560px;top:748px;width:300px">the app asks, the host decides</div>
+</div></body></html>

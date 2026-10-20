@@ -1,0 +1,13 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css"><link rel="stylesheet" href="../templates.css"><link rel="stylesheet" href="../diagram.css"><script src="../base.js"></script></head><body><div class="slide"><div class="grid"></div><div class="tagpos"><span class="tag">Act II · Agents meet the web</span></div><h2 class="head" data-edit="headline" style="font-size:66px">A page registers a tool</h2><div class="codebox"><pre style="font-size:28px">document.modelContext.<span class="f">registerTool</span>({
+  name: <span class="s">"add_item"</span>,
+  description: <span class="s">"Add an item to the list"</span>,
+  <span class="p">inputSchema</span>: {
+    type: <span class="s">"object"</span>,
+    properties: { title: { type: <span class="s">"string"</span> } }
+  },
+  <span class="p">annotations</span>: { <span class="p">readOnlyHint</span>: <span class="k">false</span> },
+  <span class="k">async</span> <span class="f">execute</span>({ title }) {
+    list.<span class="f">add</span>(title);
+    <span class="k">return</span> { ok: <span class="k">true</span> };
+  }
+});</pre></div><div class="codecap" data-edit="caption">A name, a description, a JSON schema and a function. The page keeps its own logic.</div><div class="src" data-edit="source">WebMCP draft, <code>registerTool</code>. The older name <code>navigator.modelContext</code> is deprecated.</div></div></body></html>

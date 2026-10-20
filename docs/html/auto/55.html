@@ -1,0 +1,36 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css"><link rel="stylesheet" href="../templates.css"><link rel="stylesheet" href="../diagram.css"><script src="../base.js"></script><style>
+ .rowl{position:absolute;left:112px;width:310px;font-size:32px;font-weight:600;line-height:1.2}
+ .rowl span{display:block;font-size:24px;color:var(--muted);font-weight:400;margin-top:4px}
+ .seg{position:absolute;height:110px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:600;text-align:center;line-height:1.1;color:#06202A}
+ .re{background:linear-gradient(90deg,#1C9CC4,#3DD9FF)}
+ .nw{background:linear-gradient(90deg,#E08A1E,#FFB84D);color:#2A1500}
+ .ep{background:linear-gradient(90deg,#5B4DD0,#8B7CFF);color:#F2F0FF}
+ .gh{background:transparent;color:#5B6890;box-shadow:inset 0 0 0 3px #3A4670}
+ .leg{position:absolute;top:836px;font-size:28px;color:#C9D3E8}
+ .sw{display:inline-block;width:30px;height:30px;border-radius:8px;vertical-align:-5px;margin-right:12px}
+ .note{position:absolute;left:112px;right:112px;top:906px;font-size:34px;color:#C9D3E8;line-height:1.3}
+ .note b{color:var(--text)}
+</style></head><body><div class="slide"><div class="grid"></div><div class="tagpos"><span class="tag">Act III · On-device intelligence</span></div><h2 class="head" data-edit="headline" style="font-size:88px">Ephemeral data goes last</h2>
+<div class="rowl" style="top:330px">Turn 1, sent<span>what the model reads</span></div>
+<div class="seg nw" style="left:440px;top:310px;width:190px">Instructions</div>
+<div class="seg nw" style="left:638px;top:310px;width:190px">Tools</div>
+<div class="seg ep" style="left:836px;top:310px;width:520px">Ephemeral: date, page state, selection</div>
+<div class="seg nw" style="left:1364px;top:310px;width:300px">Message 1</div>
+
+<div class="rowl" style="top:520px">Saved<span>what stays in the history</span></div>
+<div class="seg gh" style="left:440px;top:500px;width:190px">Instructions</div>
+<div class="seg gh" style="left:638px;top:500px;width:190px">Tools</div>
+<div class="seg gh" style="left:836px;top:500px;width:520px">left out</div>
+<div class="seg nw" style="left:1364px;top:500px;width:300px">Message 1 and reply</div>
+
+<div class="rowl" style="top:710px">Turn 2, sent<span>the start is the same</span></div>
+<div class="seg re" style="left:440px;top:690px;width:190px">Instructions</div>
+<div class="seg re" style="left:638px;top:690px;width:190px">Tools</div>
+<div class="seg re" style="left:836px;top:690px;width:300px">Message 1 and reply</div>
+<div class="seg ep" style="left:1144px;top:690px;width:380px">Ephemeral, new</div>
+<div class="seg nw" style="left:1532px;top:690px;width:270px">Message 2</div>
+<div class="leg" style="left:440px"><span class="sw" style="background:#3DD9FF"></span>Reused</div>
+<div class="leg" style="left:640px"><span class="sw" style="background:#FFB84D"></span>Computed</div>
+<div class="leg" style="left:900px"><span class="sw" style="background:#8B7CFF"></span>Ephemeral</div>
+<div class="note"><b>It goes last</b>, so everything before it is reused, and <b>it is not saved</b>, so the history stays the same.</div>
+</div></body></html>

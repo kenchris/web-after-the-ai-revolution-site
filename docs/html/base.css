@@ -1,0 +1,20 @@
+:root{
+  --ink:#0B1020; --ink2:#121A33; --line:#24304F; --text:#F2F5FA; --muted:#8A97B1;
+  --cyan:#3DD9FF; --violet:#8B7CFF; --amber:#FFB84D; --green:#4ADE80; --red:#FF6B7A;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1920px;height:1080px;background:var(--ink);overflow:hidden}
+body{font-family:'Segoe UI','Helvetica Neue',Arial,sans-serif;color:var(--text);position:relative}
+.slide{position:absolute;inset:0;width:1920px;height:1080px;overflow:hidden;
+  background:
+   radial-gradient(1200px 700px at 85% -10%, rgba(61,217,255,.16), transparent 60%),
+   radial-gradient(900px 600px at -5% 110%, rgba(139,124,255,.16), transparent 60%),
+   var(--ink)}
+.grid{position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:96px 96px;opacity:.18}
+.foot{position:absolute;left:96px;right:96px;bottom:48px;font-size:22px;color:var(--muted);letter-spacing:.2px}
+.tag{display:inline-block;font-size:22px;letter-spacing:3px;text-transform:uppercase;color:var(--cyan);font-weight:600}
+h1,h2{font-weight:600;letter-spacing:-1.5px;line-height:1.02}
+.mono{font-family:Consolas,'Cascadia Mono',monospace}
+
+@page{size:1920px 1080px;margin:0}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}

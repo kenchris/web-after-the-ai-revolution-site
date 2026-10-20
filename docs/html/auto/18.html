@@ -1,0 +1,29 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css"><link rel="stylesheet" href="../templates.css"><link rel="stylesheet" href="../diagram.css"><script src="../base.js"></script><style>
+ .gc{position:absolute;top:300px;width:540px;height:560px;border-radius:28px;background:rgba(18,26,51,.88);padding:40px 44px}
+ .gc .nm{font-family:Consolas,'Cascadia Mono',monospace;font-size:34px;font-weight:600;margin-bottom:10px}
+ .gc .ds{font-size:34px;line-height:1.3;color:#DCE4F5;margin-top:26px}
+ .gc .df{position:absolute;left:44px;bottom:36px;font-size:26px;color:var(--muted)}
+ .gc svg{display:block;margin-top:24px}
+ .strap{position:absolute;left:112px;right:112px;top:900px;font-size:36px;color:#C9D3E8}
+ .strap b{color:var(--amber)}
+</style></head><body><div class="slide"><div class="grid"></div><div class="tagpos"><span class="tag">Act II · Agents meet the web</span></div><h2 class="head" data-edit="headline" style="font-size:88px">Three hints, written by the page</h2>
+<div class="gc" style="left:112px;box-shadow:0 0 0 2px rgba(61,217,255,.6)">
+ <div class="nm" style="color:var(--cyan)">readOnlyHint</div>
+ <svg width="160" height="120" viewBox="0 0 160 120"><rect x="14" y="14" width="132" height="92" rx="10" fill="none" stroke="#3DD9FF" stroke-width="5"/><line x1="40" y1="44" x2="120" y2="44" stroke="#3DD9FF" stroke-width="5"/><line x1="40" y1="64" x2="104" y2="64" stroke="#3DD9FF" stroke-width="5"/><line x1="40" y1="84" x2="90" y2="84" stroke="#3DD9FF" stroke-width="5"/></svg>
+ <div class="ds">Only reads. It changes nothing.</div>
+ <div class="df">Default: false</div>
+</div>
+<div class="gc" style="left:690px;box-shadow:0 0 0 2px rgba(255,184,77,.6)">
+ <div class="nm" style="color:var(--amber)">untrustedContentHint</div>
+ <svg width="160" height="120" viewBox="0 0 160 120"><path d="M80 12 L148 106 H12 Z" fill="none" stroke="#FFB84D" stroke-width="5" stroke-linejoin="round"/><line x1="80" y1="46" x2="80" y2="76" stroke="#FFB84D" stroke-width="6" stroke-linecap="round"/><circle cx="80" cy="92" r="4.5" fill="#FFB84D"/></svg>
+ <div class="ds">The output may contain text written by users or third parties.</div>
+ <div class="df">Default: false</div>
+</div>
+<div class="gc" style="left:1268px;box-shadow:0 0 0 2px rgba(255,107,122,.65)">
+ <div class="nm" style="color:var(--red)">consequentialHint</div>
+ <svg width="160" height="120" viewBox="0 0 160 120"><line x1="42" y1="14" x2="42" y2="108" stroke="#FF6B7A" stroke-width="6" stroke-linecap="round"/><path d="M42 18 H128 L108 44 L128 70 H42" fill="rgba(255,107,122,.2)" stroke="#FF6B7A" stroke-width="5" stroke-linejoin="round"/></svg>
+ <div class="ds">Real-world and hard to undo: booking, paying, deleting.</div>
+ <div class="df">Default: false</div>
+</div>
+<div class="strap"><b>Written by the site itself,</b> which has little reason to mislead its own users.</div>
+<div class="src" data-edit="source">WebMCP draft: <code>readOnlyHint</code>, <code>untrustedContentHint</code>, <code>consequentialHint</code>. All default to false.</div></div></body></html>

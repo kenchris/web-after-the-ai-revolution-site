@@ -1,0 +1,22 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css"><link rel="stylesheet" href="../templates.css"><link rel="stylesheet" href="../diagram.css"><script src="../base.js"></script><style>
+ .col{position:absolute;width:400px;border-radius:26px 26px 0 0;padding:34px 36px}
+ .col .n{font-size:64px;font-weight:700;letter-spacing:-1.5px;line-height:1}
+ .col .p{font-size:32px;margin-top:14px;color:#DCE4F5}
+ .col .f{font-size:26px;margin-top:10px;color:var(--muted)}
+ .base{position:absolute;left:112px;right:112px;top:858px;height:4px;background:#2D3B66;border-radius:2px}
+ .dev{position:absolute;top:880px;font-size:28px;color:#C9D3E8}
+ .dev b{color:var(--text)}
+</style></head><body><div class="slide"><div class="grid"></div><div class="tagpos"><span class="tag">Act III · On-device intelligence</span></div><h2 class="head" data-edit="headline" style="font-size:88px">Gemma 4: four sizes, open weights</h2>
+<div class="col" style="left:112px;top:600px;height:258px;background:linear-gradient(180deg,rgba(61,217,255,.22),rgba(61,217,255,.06));box-shadow:0 0 0 2px rgba(61,217,255,.6)"><div class="n" style="color:var(--cyan)">E2B</div><div class="p">2.3B effective</div><div class="f">2.58 GB as a LiteRT-LM file</div></div>
+<div class="col" style="left:542px;top:520px;height:338px;background:linear-gradient(180deg,rgba(61,217,255,.26),rgba(61,217,255,.06));box-shadow:0 0 0 2px rgba(61,217,255,.6)"><div class="n" style="color:var(--cyan)">E4B</div><div class="p">4.5B effective</div><div class="f">3.65 GB as a LiteRT-LM file</div></div>
+<div class="col" style="left:972px;top:420px;height:438px;background:linear-gradient(180deg,rgba(139,124,255,.28),rgba(139,124,255,.07));box-shadow:0 0 0 2px rgba(139,124,255,.65)"><div class="n" style="color:#B7ACFF">26B</div><div class="p">Mixture of experts</div><div class="f">3.8B active per token</div></div>
+<div class="col" style="left:1402px;top:320px;height:538px;background:linear-gradient(180deg,rgba(139,124,255,.32),rgba(139,124,255,.08));box-shadow:0 0 0 2px rgba(139,124,255,.65)"><div class="n" style="color:#B7ACFF">31B</div><div class="p">Dense</div><div class="f">30.7B parameters</div></div>
+<div class="base"></div>
+<div class="dev" style="left:112px;width:840px"><b>Phones, a Raspberry Pi, small PCs</b></div>
+<div class="dev" style="left:972px;width:830px"><b>Laptops with a GPU, workstations, servers</b></div>
+<div class="chip" style="left:112px;top:944px">Apache 2.0</div>
+<div class="chip" style="left:330px;top:944px">Text and image input</div>
+<div class="chip" style="left:690px;top:944px">Audio on E2B and E4B</div>
+<div class="chip vi" style="left:1060px;top:944px">128K context, 256K on the large two</div>
+<div class="chip" style="left:112px;top:340px;color:var(--amber)">Intel NPU support is coming, through OpenVINO</div>
+<div class="src" data-edit="source">Google Gemma 4 model card and LiteRT-LM page. License: Apache 2.0. Intel and Google blog post on Gemma 4 for Intel hardware.</div></div></body></html>

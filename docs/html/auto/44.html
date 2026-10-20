@@ -1,0 +1,25 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css"><link rel="stylesheet" href="../templates.css"><link rel="stylesheet" href="../diagram.css"><script src="../base.js"></script><style>
+ .tk{position:absolute;top:310px;width:150px;height:76px;border-radius:16px;background:#1B2750;display:flex;align-items:center;justify-content:center;font-size:30px;font-family:Consolas,'Cascadia Mono',monospace;color:#E6ECF8}
+ .kv{position:absolute;top:446px;width:150px;display:flex;gap:8px;justify-content:center}
+ .kv i{font-style:normal;font-size:24px;font-weight:600;padding:6px 14px;border-radius:10px}
+ .kv .k{background:rgba(61,217,255,.22);color:var(--cyan)}
+ .kv .v{background:rgba(139,124,255,.25);color:#B7ACFF}
+ .band{position:absolute;left:96px;top:420px;width:1160px;height:112px;border-radius:22px;box-shadow:0 0 0 2px rgba(61,217,255,.45);background:rgba(10,34,48,.55)}
+ .bl{position:absolute;left:112px;top:548px;font-size:26px;letter-spacing:3px;text-transform:uppercase;font-weight:600;color:var(--cyan)}
+ .nx{position:absolute;left:1420px;top:310px;width:240px;height:76px;border-radius:16px;background:#2A1D0A;box-shadow:0 0 0 2px rgba(255,184,77,.7);display:flex;align-items:center;justify-content:center;font-size:30px;font-family:Consolas,'Cascadia Mono',monospace;color:var(--amber)}
+ .nt{position:absolute;left:1320px;top:410px;width:480px;font-size:28px;line-height:1.3;color:#C9D3E8}
+ .cd{position:absolute;top:660px;width:830px;height:250px;border-radius:24px;padding:28px 36px;font-size:30px;line-height:1.3}
+ .cd b{display:block;font-size:36px;font-weight:600;margin-bottom:10px}
+ .cd span{color:#B9C5DD}
+</style></head><body><div class="slide"><div class="grid"></div><div class="tagpos"><span class="tag">Act III · On-device intelligence</span></div><h2 class="head" data-edit="headline" style="font-size:88px">The KV cache: what the model keeps</h2>
+<div class="band"></div>
+<div class="tk" style="left:112px">The</div><div class="tk" style="left:282px">null</div><div class="tk" style="left:452px">check</div><div class="tk" style="left:622px">is</div><div class="tk" style="left:792px">miss</div><div class="tk" style="left:962px">ing</div>
+<div class="kv" style="left:112px"><i class="k">K</i><i class="v">V</i></div><div class="kv" style="left:282px"><i class="k">K</i><i class="v">V</i></div><div class="kv" style="left:452px"><i class="k">K</i><i class="v">V</i></div><div class="kv" style="left:622px"><i class="k">K</i><i class="v">V</i></div><div class="kv" style="left:792px"><i class="k">K</i><i class="v">V</i></div><div class="kv" style="left:962px"><i class="k">K</i><i class="v">V</i></div>
+<div class="bl">The KV cache: what the model keeps for each token</div>
+<svg class="dg" viewBox="0 0 1920 1080"><defs><marker id="a8" markerUnits="userSpaceOnUse" markerWidth="22" markerHeight="22" refX="18" refY="11" orient="auto"><path d="M0,0 L22,11 L0,22 z" fill="#FFB84D"/></marker></defs>
+ <line x1="1262" y1="348" x2="1408" y2="348" stroke="#FFB84D" stroke-width="5" marker-end="url(#a8)"/></svg>
+<div class="nx">next</div>
+<div class="nt">The new token reads every stored K and V, then adds its own.</div>
+<div class="cd" style="left:112px;background:#2A1417;box-shadow:0 0 0 2px rgba(255,107,122,.6)"><b style="color:var(--red)">Without the cache</b><span>Every new token would read the whole prompt again, from the first word.</span></div>
+<div class="cd" style="left:978px;background:#0C2418;box-shadow:0 0 0 2px rgba(80,220,150,.6)"><b style="color:var(--green)">With the cache</b><span>One token of new work. The price is memory: it grows with every token in the context.</span></div>
+<div class="src" data-edit="source">Keys and values (K and V) are what the attention layers compute for each token.</div></div></body></html>

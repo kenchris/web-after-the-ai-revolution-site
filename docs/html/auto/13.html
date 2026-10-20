@@ -1,0 +1,34 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css"><link rel="stylesheet" href="../templates.css"><link rel="stylesheet" href="../diagram.css"><script src="../base.js"></script><style>
+ .lane{position:absolute;left:112px;right:112px;height:330px;border-radius:26px;background:rgba(18,26,51,.85);box-shadow:0 0 0 2px #24304F}
+ .l1{top:290px}.l2{top:660px}
+ .lane .lb{position:absolute;left:40px;top:26px;font-size:30px;font-weight:600}
+ .l1 .lb{color:var(--amber)}.l2 .lb{color:var(--cyan)}
+ .nd2{position:absolute;top:100px;height:170px;border-radius:18px;background:#0F1730;box-shadow:0 0 0 2px #2D3B66;padding:22px 26px;font-size:28px;line-height:1.25}
+ .nd2 b{display:block;font-size:30px;margin-bottom:6px;font-weight:600}.nd2 .m{color:var(--muted);font-size:24px}
+ .ar{position:absolute;top:177px;height:6px;border-radius:3px}
+ .ar::after{content:"";position:absolute;right:-4px;top:-11px;border-left:22px solid;border-top:14px solid transparent;border-bottom:14px solid transparent}
+ .l1 .ar{background:var(--amber);color:var(--amber)}.l1 .ar::after{border-left-color:var(--amber)}
+ .l2 .ar{background:var(--cyan)}.l2 .ar::after{border-left-color:var(--cyan)}
+ .shot{position:absolute;top:84px;left:410px;width:300px;height:190px;border-radius:12px;background:repeating-linear-gradient(135deg,#1A2342 0 14px,#16203B 14px 28px);box-shadow:0 0 0 3px var(--amber);display:flex;align-items:flex-end;padding:14px 18px;font-size:26px;font-weight:600;color:var(--amber)}
+ .call{position:absolute;top:118px;left:560px;width:560px;border-radius:14px;background:#0A2230;box-shadow:0 0 0 3px var(--cyan);padding:22px 28px;font-size:30px;line-height:1.35}
+ .call .k{color:#7BE8FF}.call .s{color:#A8F0C9}
+ .note{position:absolute;right:112px;bottom:44px;font-size:22px;color:var(--muted)}
+</style></head><body><div class="slide"><div class="grid"></div><div class="tagpos"><span class="tag">Act II · Agents meet the web</span></div><h2 class="head" data-edit="headline" style="font-size:88px">Imitate a person, or ask the page</h2>
+<div class="lane l1"><div class="lb">Today: the agent imitates a person</div>
+ <div class="nd2" style="left:40px;width:250px"><b>Page</b><span class="m">pixels and DOM</span></div>
+ <div class="ar" style="left:300px;width:90px"></div>
+ <div class="shot">Screenshot</div>
+ <div class="ar" style="left:728px;width:90px"></div>
+ <div class="nd2" style="left:838px;width:390px"><b>Model guesses</b><span class="m">"click at x 432, y 789?"</span></div>
+ <div class="ar" style="left:1238px;width:70px"></div>
+ <div class="nd2" style="left:1318px;width:300px;box-shadow:0 0 0 2px var(--amber)"><b>Breaks when the layout changes</b></div>
+</div>
+<div class="lane l2"><div class="lb">With WebMCP: the page offers tools</div>
+ <div class="nd2" style="left:40px;width:400px"><b>Page registers tools</b><span class="m">typed, with a schema</span></div>
+ <div class="ar" style="left:450px;width:80px"></div>
+ <div class="call mono"><span class="k">add_item</span>(<span class="s">{ "title": "Milk" }</span>)</div>
+ <div class="ar" style="left:1130px;width:80px"></div>
+ <div class="nd2" style="left:1220px;width:400px;box-shadow:0 0 0 2px var(--cyan)"><b>Typed result</b><span class="m">in the user's own session</span></div>
+</div>
+<div class="note">Illustration, not to scale.</div>
+</div></body></html>

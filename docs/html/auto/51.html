@@ -1,0 +1,13 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css"><link rel="stylesheet" href="../templates.css"><link rel="stylesheet" href="../diagram.css"><script src="../base.js"></script><style>
+ .ly{position:absolute;left:112px;width:1696px;height:122px;border-radius:20px;display:flex;align-items:center;padding:0 36px;gap:32px}
+ .ly .n{width:300px;font-size:38px;font-weight:600;letter-spacing:-.5px}
+ .ly .d{width:470px;font-size:28px;line-height:1.25;color:#C9D3E8}
+ .ly .o{flex:1;font-size:26px;line-height:1.25;color:#B9C5DD;border-left:3px solid #2D3B66;padding-left:28px}
+ .ly .o b{display:block;font-size:22px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:2px}
+</style></head><body><div class="slide"><div class="grid"></div><div class="tagpos"><span class="tag">Act III · How an agent remembers</span></div><h2 class="head" data-edit="headline" style="font-size:88px">Memory has layers</h2>
+<div class="ly" style="top:286px;background:#0A2230;box-shadow:0 0 0 2px rgba(61,217,255,.6)"><div class="n" style="color:var(--cyan)">Short-term</div><div class="d">The chat so far, replayed into the prompt</div><div class="o"><b>Today</b>A window sized to the model. Old turns are folded into a summary by compaction</div></div>
+<div class="ly" style="top:420px;background:#1A1640;box-shadow:0 0 0 2px rgba(139,124,255,.6)"><div class="n" style="color:#B7ACFF">Long-term</div><div class="d">Files and archives, read on demand</div><div class="o"><b>Today</b>Documents are read in parts, and never fill the history</div></div>
+<div class="ly" style="top:554px;background:#2A1D0A;box-shadow:0 0 0 2px rgba(255,184,77,.6)"><div class="n" style="color:var(--amber)">Semantic</div><div class="d">Curated facts about the user and the work</div><div class="o"><b>Today</b>The few facts that match your question are added to the ephemeral part of the prompt</div></div>
+<div class="ly" style="top:688px;background:#0F1730;box-shadow:0 0 0 2px #2D3B66"><div class="n">Episodic</div><div class="d">What happened, in order</div><div class="o"><b>Today</b>An append-only ledger on disk. A background agent mines it for candidate facts while you are away</div></div>
+<div class="ly" style="top:822px;background:#0F1730;box-shadow:0 0 0 2px #2D3B66"><div class="n">Procedural</div><div class="d">Reusable skills and ways of working</div><div class="o"><b>Today</b>Task files and skills, including skills served by MCP servers. Still early</div></div>
+<div class="src" data-edit="source">Our open-source agent runtime. The five kinds are the common ones in the agent literature.</div></div></body></html>

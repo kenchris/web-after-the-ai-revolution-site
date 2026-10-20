@@ -1,0 +1,35 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css"><link rel="stylesheet" href="../templates.css"><link rel="stylesheet" href="../diagram.css"><script src="../base.js"></script><style>
+ .col{position:absolute;top:290px;height:560px;border-radius:26px;padding:32px 34px}
+ .col h4{font-size:26px;letter-spacing:3px;text-transform:uppercase;font-weight:600;margin-bottom:20px}
+ .fact{border-radius:12px;padding:10px 16px;font-size:26px;margin-bottom:10px;background:#141C38;color:#B9C5DD}
+ .fact.on{background:#2A1D0A;box-shadow:0 0 0 2px var(--amber);color:#FFE2B0}
+ .fact.off{opacity:.5}
+ .sc{font-size:28px;line-height:1.5;color:#DCE4F5}
+ .sc b{color:var(--amber);font-weight:600}
+ .blk{border-radius:12px;padding:12px 18px;font-size:26px;margin-bottom:10px;text-align:center;font-weight:600;color:#06202A}
+ .nt{position:absolute;left:112px;right:112px;top:872px;font-size:30px;line-height:1.35;color:#C9D3E8}
+ .nt b{color:var(--text)}
+</style></head><body><div class="slide"><div class="grid"></div><div class="tagpos"><span class="tag">Act III · How an agent remembers</span></div><h2 class="head" data-edit="headline" style="font-size:76px">Instructions stay. Memories come per question.</h2>
+<div class="col" style="left:112px;width:540px;background:rgba(18,26,51,.88);box-shadow:0 0 0 2px #24304F"><h4 style="color:var(--amber)">Facts it has learned</h4>
+ <div class="fact off">Works on a 3D viewer</div>
+ <div class="fact on">Prefers short answers</div>
+ <div class="fact off">Allergic to peanuts</div>
+ <div class="fact on">Uses TypeScript, not JavaScript</div>
+ <div class="fact off">Daughter's birthday is in May</div>
+ <div class="fact off">...and many more</div>
+</div>
+<div class="col" style="left:712px;width:490px;background:rgba(18,26,51,.88);box-shadow:0 0 0 2px #24304F"><h4 style="color:#B7ACFF">A matcher scores each one</h4>
+ <div class="sc"><b>Words</b> in common with your message<br><b>Kind</b>: preference, constraint, language, skill, project<br><b>Recency</b>: half as strong every two weeks</div>
+ <div class="sc" style="margin-top:26px;color:#B9C5DD">It takes a millisecond or two, and stops at about 180 tokens.</div>
+</div>
+<div class="col" style="left:1262px;width:546px;background:rgba(18,26,51,.88);box-shadow:0 0 0 2px #24304F"><h4 style="color:var(--cyan)">This turn's request</h4>
+ <div class="blk" style="background:linear-gradient(90deg,#1C9CC4,#3DD9FF)">System prompt: rules, tools and <b>your own instructions</b></div>
+ <div class="blk" style="background:linear-gradient(90deg,#1C9CC4,#3DD9FF)">The conversation so far</div>
+ <div class="blk" style="background:linear-gradient(90deg,#5B4DD0,#8B7CFF);color:#F2F0FF">Ephemeral: date, page, <b>relevant memories</b></div>
+ <div class="blk" style="background:linear-gradient(90deg,#E08A1E,#FFB84D);color:#2A1500">Your message</div>
+</div>
+<svg class="dg" viewBox="0 0 1920 1080"><defs><marker id="am" markerUnits="userSpaceOnUse" markerWidth="22" markerHeight="22" refX="18" refY="11" orient="auto"><path d="M0,0 L22,11 L0,22 z" fill="#8A97B1"/></marker></defs>
+ <line x1="656" y1="570" x2="708" y2="570" stroke="#8A97B1" stroke-width="5" marker-end="url(#am)"/>
+ <line x1="1206" y1="570" x2="1258" y2="570" stroke="#8A97B1" stroke-width="5" marker-end="url(#am)"/></svg>
+<div class="nt"><b>Two kinds.</b> Instructions you write sit in the system prompt every turn, and can be scoped to a project. Learned facts are matched per question, and <b>not saved in the history</b>.</div>
+<div class="src" data-edit="source">Our open-source agent runtime: a relevance matcher over the user's stored facts, with a small token budget.</div></div></body></html>
