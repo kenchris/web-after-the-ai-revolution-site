@@ -83,6 +83,19 @@
   // On a touch screen the video has no controls of its own while it sits in the slide (they would take the tap and only offer a small play button);
   // the tap starts it full screen, where the controls are on.
   function setControls() { var v = document.querySelector('video.vvid'); if (v && coarse) v.controls = !!fsEl(); }
+  // when the video is over or full screen is left, show the first picture again (an ended video on a phone can come back blank)
+  function rewind() {
+    var v = document.querySelector('video.vvid'); if (!v) return;
+    setTimeout(function () {
+      if (fsEl()) return;
+      try { v.pause(); v.currentTime = 0.01; } catch (x) {}
+      v.style.display = 'none'; void v.offsetHeight; v.style.display = ''; setControls();
+    }, 250);
+  }
+  document.addEventListener('ended', function (e) { if (e.target && e.target.tagName === 'VIDEO') rewind(); }, true);
+  document.addEventListener('fullscreenchange', function () { if (!fsEl()) rewind(); });
+  document.addEventListener('webkitfullscreenchange', function () { if (!fsEl()) rewind(); });
+  document.addEventListener('webkitendfullscreen', rewind, true);
   setControls(); document.addEventListener('DOMContentLoaded', setControls); addEventListener('load', setControls); document.addEventListener('fullscreenchange', setControls); document.addEventListener('webkitfullscreenchange', setControls);
   var vx, vy, vt = 0;
   document.addEventListener('pointerdown', function (e) { if (e.pointerType === 'touch') { vx = e.screenX; vy = e.screenY; vt = Date.now(); } }, true);
