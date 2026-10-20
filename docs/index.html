@@ -73,10 +73,10 @@
 var N=90, cur=1, wrap=document.getElementById('wrap'), f=document.getElementById('f'), stage=document.getElementById('stage'), hud=document.getElementById('hud'), hudT, uiT, noteT, ignoreRot=false;
 var coarse=window.matchMedia&&matchMedia('(pointer:coarse)').matches;
 function pad(n){return (n<10?'0':'')+n}
-function url(n){return 'html/auto/'+pad(n)+'.html?v=20261020234800'}
+function url(n){return 'html/auto/'+pad(n)+'.html?v=20261020235028'}
 function size(){var vv=window.visualViewport;return [Math.round((vv&&vv.width)||wrap.clientWidth||innerWidth),Math.round((vv&&vv.height)||wrap.clientHeight||innerHeight)]}
 function fit(){var d=size(),w=d[0],h=d[1],s=Math.min(w/1920,h/1080);
- stage.style.transform='translate('+((w-1920*s)/2)+'px,'+((h-1080*s)/2)+'px) scale('+s+')';checkRot()}
+ stage.style.transform='translate('+((w-1920*s)/2)+'px,'+((h-1080*s)/2)+'px) scale('+s+')';checkRot();if(window.holes)holes()}
 function checkRot(){var d=size(),portrait=d[1]>d[0]*1.1;
  document.getElementById('rot').classList.toggle('on',portrait&&coarse&&!ignoreRot&&!document.body.classList.contains('overview'))}
 function note(t){var n=document.getElementById('note');n.textContent=t;n.classList.add('on');clearTimeout(noteT);noteT=setTimeout(function(){n.classList.remove('on')},4200)}
@@ -150,6 +150,15 @@ else addEventListener('mousemove',function(){ui(true)});
  document.addEventListener('visibilitychange',revive);addEventListener('focus',revive);addEventListener('pageshow',revive);
  document.addEventListener('fullscreenchange',function(){setTimeout(revive,200)});document.addEventListener('webkitfullscreenchange',function(){setTimeout(revive,200)});
  f.addEventListener('load',revive)})();
+// A tap on the video must reach the slide itself: only a tap that starts there counts as the touch that may start full screen.
+// So the touch layer has a hole where the video is.
+function holes(){var h=document.getElementById('hit');try{var v=f.contentDocument.querySelector('video.vvid');
+ if(!v){h.style.clipPath='';return}
+ var m=stage.getBoundingClientRect(),s=m.width/1920,r=v.getBoundingClientRect(),d=size(),
+  x1=Math.round(m.left+r.left*s),y1=Math.round(m.top+r.top*s),x2=Math.round(m.left+r.right*s),y2=Math.round(m.top+r.bottom*s);
+ h.style.clipPath='polygon(evenodd,0 0,'+d[0]+'px 0,'+d[0]+'px '+d[1]+'px,0 '+d[1]+'px,0 0,'+x1+'px '+y1+'px,'+x1+'px '+y2+'px,'+x2+'px '+y2+'px,'+x2+'px '+y1+'px,'+x1+'px '+y1+'px)'}catch(x){h.style.clipPath=''}}
+f.addEventListener('load',function(){setTimeout(holes,100);setTimeout(holes,800)});
+
 document.getElementById('r-fs').onclick=function(){enterFs()};
 document.getElementById('r-go').onclick=function(){ignoreRot=true;checkRot()};
 f.addEventListener('load',function(){window.focus()});
