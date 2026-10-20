@@ -12,10 +12,15 @@
 <style>
  html,body{margin:0;width:100%;height:100%;background:#05080F;color:#C9D3E8;font-family:"Segoe UI",system-ui,sans-serif;overflow:hidden;overscroll-behavior:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
  html,body{position:fixed;inset:0;touch-action:none}
+ /* nothing on the page can be selected or dragged, and a long press shows no menu */
+ *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-user-drag:none}
  /* the slide is 1920 wide: it lives in a clipped box so it can never make the page wider than the screen */
  #wrap{position:fixed;inset:0;overflow:hidden;contain:strict}
  #stage{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;background:#0B1020}
  #stage iframe{position:absolute;inset:0;width:1920px;height:1080px;border:0;background:#0B1020}
+ #hit{position:fixed;inset:0;z-index:3;display:none;touch-action:none;background:transparent}
+ body.coarse #hit{display:block}
+ body.overview #hit{display:none}
  #bar{position:fixed;left:0;right:0;bottom:0;height:4px;background:#121A33}
  #bar i{display:block;height:100%;width:0;background:#3DD9FF;transition:width .2s}
  #hud{position:fixed;right:max(14px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom));font-size:14px;opacity:0;transition:opacity .3s;background:rgba(5,8,15,.8);padding:6px 10px;border-radius:8px;pointer-events:none}
@@ -36,6 +41,7 @@
  #rot .row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
  #rot svg{width:88px;height:88px;stroke:#3DD9FF;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;animation:turn 2.6s ease-in-out infinite}
  @keyframes turn{0%,20%{transform:rotate(0)}60%,100%{transform:rotate(-90deg)}}
+ #dbg{position:fixed;left:8px;bottom:8px;max-width:70vw;font:12px/1.3 ui-monospace,Consolas,monospace;color:#8CF0B8;background:rgba(5,8,15,.85);padding:4px 8px;border-radius:6px;z-index:20;pointer-events:none;display:none}
  #note{position:fixed;left:50%;bottom:max(24px,env(safe-area-inset-bottom));transform:translateX(-50%);max-width:80vw;background:rgba(18,26,51,.95);border:1px solid #2D3B66;border-radius:12px;padding:10px 16px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:8;text-align:center}
  #note.on{opacity:1}
  #grid{position:fixed;inset:0;background:#05080F;overflow:auto;display:none;padding:24px;box-sizing:border-box}
@@ -48,6 +54,7 @@
 </style></head><body>
 <div id="wrap"><div id="stage"><iframe id="f" title="slide" allow="fullscreen" allowfullscreen></iframe></div></div>
 <div id="grid"></div>
+<div id="hit"></div>
 <div id="bar"><i id="p"></i></div>
 <div id="hud"></div>
 <div id="ui">
@@ -61,11 +68,12 @@
  <h1>Turn your phone sideways</h1><p>The slides are made for a wide screen. Turn the phone, or go full screen and it will turn by itself.</p>
  <div class="row"><button id="r-fs">Full screen</button><button id="r-go">Show anyway</button></div></div>
 <div id="note"></div>
+<div id="dbg"></div>
 <script>
 var N=90, cur=1, wrap=document.getElementById('wrap'), f=document.getElementById('f'), stage=document.getElementById('stage'), hud=document.getElementById('hud'), hudT, uiT, noteT, ignoreRot=false;
 var coarse=window.matchMedia&&matchMedia('(pointer:coarse)').matches;
 function pad(n){return (n<10?'0':'')+n}
-function url(n){return 'html/auto/'+pad(n)+'.html?v=20261020231438'}
+function url(n){return 'html/auto/'+pad(n)+'.html?v=20261020234800'}
 function size(){var vv=window.visualViewport;return [Math.round((vv&&vv.width)||wrap.clientWidth||innerWidth),Math.round((vv&&vv.height)||wrap.clientHeight||innerHeight)]}
 function fit(){var d=size(),w=d[0],h=d[1],s=Math.min(w/1920,h/1080);
  stage.style.transform='translate('+((w-1920*s)/2)+'px,'+((h-1080*s)/2)+'px) scale('+s+')';checkRot()}
@@ -92,6 +100,9 @@ function exitFs(){var ex=document.exitFullscreen||document.webkitExitFullscreen;
 function toggleFs(){fsEl()?exitFs():enterFs()}
 function onFsChange(){if(!fsEl()){try{screen.orientation&&screen.orientation.unlock&&screen.orientation.unlock()}catch(x){}}setTimeout(fit,150)}
 document.addEventListener('fullscreenchange',onFsChange);document.addEventListener('webkitfullscreenchange',onFsChange);
+var DEBUG=/[?&]debug/.test(location.search),dbgEl=document.getElementById('dbg'),dbgN=0;
+if(DEBUG)dbgEl.style.display='block';
+function dbg(m){if(!DEBUG)return;dbgEl.textContent=(++dbgN)+' '+m}
 function videoCmd(){try{f.contentWindow.postMessage({cmd:'video'},'*')}catch(x){}}
 function onKey(k,e,shift){
  if(document.body.classList.contains('overview')){if(k==='Escape'||k==='g'||k==='G')overview(false);return}
@@ -104,8 +115,9 @@ function onKey(k,e,shift){
  else if(k==='g'||k==='G'||k==='Escape')overview();
  else return;if(e)e.preventDefault()}
 addEventListener('keydown',function(e){if(e.ctrlKey||e.metaKey||e.altKey)return;onKey(e.key,e,e.shiftKey)});
+addEventListener('selectstart',function(e){e.preventDefault()});addEventListener('contextmenu',function(e){e.preventDefault()});addEventListener('dragstart',function(e){e.preventDefault()});
 addEventListener('message',function(e){if(e.source!==f.contentWindow||!e.data)return;
- if(typeof e.data.k==='string')onKey(e.data.k,null,!!e.data.shift);else if(e.data.ui)ui()});
+ if(typeof e.data.k==='string')onKey(e.data.k,null,!!e.data.shift);else if(e.data.ui)ui();else if(e.data.dbg)dbg(e.data.dbg)});
 document.getElementById('b-prev').onclick=function(){show(cur-1);ui(true)};
 document.getElementById('b-next').onclick=function(){show(cur+1);ui(true)};
 document.getElementById('b-grid').onclick=function(){overview()};
@@ -113,15 +125,31 @@ document.getElementById('b-fs').onclick=function(){toggleFs()};
 document.getElementById('b-menu').onclick=function(){ui()};
 if(coarse)document.body.classList.add('coarse');
 else addEventListener('mousemove',function(){ui(true)});
-// taps and swipes on the black bars around the slide (the slide itself handles its own), same rules as inside the slide
-(function(){var sx,sy,t0=null;
- addEventListener('pointerdown',function(e){if(e.pointerType!=='touch'||!e.isPrimary)return;if(e.target.closest&&e.target.closest('button,#rot,#grid,#note'))return;sx=e.screenX;sy=e.screenY;t0=Date.now()},{passive:true});
- addEventListener('pointercancel',function(){t0=null});
- addEventListener('pointerup',function(e){if(e.pointerType!=='touch'||t0===null)return;var dx=e.screenX-sx,dy=e.screenY-sy,dt=Date.now()-t0;t0=null;
-  if(document.body.classList.contains('overview'))return;
-  if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)*1.3){show(cur+(dx<0?1:-1));return}
-  if(Math.abs(dx)>18||Math.abs(dy)>18||dt>700)return;
-  var d=size();if(e.clientY<Math.max(48,d[1]*0.1))ui();else if(e.clientX<d[0]*0.3)show(cur-1);else show(cur+1)})})();
+// On a touch screen one transparent layer over the whole player takes every tap and swipe, so nothing depends on the slide
+// document inside the frame (which is reloaded on each slide and was easy to lose after a video left full screen).
+(function(){var hit=document.getElementById('hit'),sx,sy,t0=null,tx,ty,tt=null,lastAct=0;
+ function onVideo(cx,cy){try{var m=stage.getBoundingClientRect(),s=m.width/1920,el=f.contentDocument.elementFromPoint((cx-m.left)/s,(cy-m.top)/s),v=el&&el.closest&&el.closest('video');
+  if(v){if(f.contentWindow.__playFull){f.contentWindow.__playFull(v);return true}}}catch(x){}return false}
+ function finish(dx,dy,dt,cx,cy,src){var now=Date.now();if(now-lastAct<300)return;
+  if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)*1.3){lastAct=now;show(cur+(dx<0?1:-1));dbg('swipe '+(dx<0?'next':'back')+' ('+src+')');return}
+  if(Math.abs(dx)>18||Math.abs(dy)>18){dbg('ignored: finger moved '+Math.round(Math.abs(dx))+','+Math.round(Math.abs(dy))+' px ('+src+')');return}
+  if(dt>700){dbg('ignored: held '+dt+' ms ('+src+')');return}
+  lastAct=now;var d=size();
+  if(cy<Math.max(48,d[1]*0.1)){ui();dbg('tap top: buttons')}
+  else if(onVideo(cx,cy)){dbg('tap video: play full screen')}
+  else if(cx<d[0]*0.3){show(cur-1);dbg('tap left: back ('+src+')')}
+  else{show(cur+1);dbg('tap: next ('+src+')')}}
+ hit.addEventListener('pointerdown',function(e){if(e.pointerType==='mouse'||!e.isPrimary)return;sx=e.screenX;sy=e.screenY;t0=Date.now();dbg('down')},{passive:true});
+ hit.addEventListener('pointercancel',function(){if(t0!==null)dbg('pointer cancelled by the browser');t0=null});
+ hit.addEventListener('pointerup',function(e){if(e.pointerType==='mouse'||t0===null)return;var dt=Date.now()-t0;t0=null;finish(e.screenX-sx,e.screenY-sy,dt,e.clientX,e.clientY,'pointer')});
+ hit.addEventListener('touchstart',function(e){if(e.touches.length!==1){tt=null;return}tx=e.touches[0].screenX;ty=e.touches[0].screenY;tt=Date.now()},{passive:true});
+ hit.addEventListener('touchend',function(e){if(tt===null||!e.changedTouches.length)return;var c=e.changedTouches[0],dt=Date.now()-tt;tt=null;
+  setTimeout(function(){finish(c.screenX-tx,c.screenY-ty,dt,c.clientX,c.clientY,'touch')},30)},{passive:true});
+ // after full screen, a video, a call or a tab switch: forget any half-finished touch and make the browser find the layer again
+ function revive(){t0=null;tt=null;hit.style.display='none';void hit.offsetHeight;hit.style.display='';dbg('ready')}
+ document.addEventListener('visibilitychange',revive);addEventListener('focus',revive);addEventListener('pageshow',revive);
+ document.addEventListener('fullscreenchange',function(){setTimeout(revive,200)});document.addEventListener('webkitfullscreenchange',function(){setTimeout(revive,200)});
+ f.addEventListener('load',revive)})();
 document.getElementById('r-fs').onclick=function(){enterFs()};
 document.getElementById('r-go').onclick=function(){ignoreRot=true;checkRot()};
 f.addEventListener('load',function(){window.focus()});

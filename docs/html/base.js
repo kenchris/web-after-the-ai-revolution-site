@@ -45,7 +45,7 @@
   var post = function (m) { window.parent.postMessage(m, '*'); };
   var coarse = window.matchMedia && matchMedia('(pointer:coarse)').matches;
   var sty = document.createElement('style');
-  sty.textContent = 'html,body{touch-action:none;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}';
+  sty.textContent = 'html,body{touch-action:none;-webkit-tap-highlight-color:transparent}*{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-user-drag:none}';
   document.head.appendChild(sty);
   var KEYS = ['ArrowRight','ArrowLeft','ArrowUp','ArrowDown','PageDown','PageUp','Home','End',' ','Enter','Backspace','Escape','f','F','g','G','v','V','Tab'];
   addEventListener('keydown', function (e) {
@@ -63,6 +63,7 @@
     else if (v.webkitEnterFullscreen) { try { v.webkitEnterFullscreen(); } catch (x) {} }
     return true;
   }
+  window.__playFull = playFull;
   function toggleVideo() {
     var v = document.querySelector('video.vvid'); if (!v) return;
     if (fsEl()) { (document.exitFullscreen || document.webkitExitFullscreen).call(document); v.pause(); }
@@ -84,18 +85,40 @@
   // Taps and swipes on a touch screen: left third back, the rest forward, the top strip shows the buttons.
   // The slide is drawn about a third of its size on a phone, so how far a finger moved is measured in real screen
   // pixels (screenX, screenY), not in the slide's own pixels; touch-action none stops the browser taking a swipe as a scroll.
-  var sx, sy, t0 = null;
+  // Both pointer events and touch events are listened to (some phone browsers are odd about one of them); a gesture is
+  // acted on once. A selection or the long-press menu can no longer swallow taps. ?debug on the page address shows why a tap was ignored.
+  function dbg(m) { post({ dbg: m }); }
+  var lastAct = 0;
+  function finish(dx, dy, dt, target, cx, cy, src) {
+    var now = Date.now(); if (now - lastAct < 350) return;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.3) { lastAct = now; post({ k: dx < 0 ? 'ArrowRight' : 'ArrowLeft' }); dbg('swipe ' + (dx < 0 ? 'next' : 'back') + ' (' + src + ')'); return; }
+    var why = null;
+    if (Math.abs(dx) > 18 || Math.abs(dy) > 18) why = 'finger moved ' + Math.round(Math.abs(dx)) + ',' + Math.round(Math.abs(dy)) + ' px';
+    else if (dt > 700) why = 'held ' + dt + ' ms';
+    else if (target && target.closest && target.closest('video')) why = 'tap on the video';
+    if (why) { dbg('ignored: ' + why + ' (' + src + ')'); return; }
+    lastAct = now;
+    if (cy < 110) { post({ ui: 1 }); dbg('tap top: buttons (' + src + ')'); }
+    else if (cx < 576) { post({ k: 'ArrowLeft' }); dbg('tap left: back (' + src + ')'); }
+    else { post({ k: 'ArrowRight' }); dbg('tap: next (' + src + ')'); }
+  }
+  var sx, sy, t0 = null, tx, ty, tt = null;
   addEventListener('pointerdown', function (e) { if (e.pointerType !== 'touch' || !e.isPrimary) return; sx = e.screenX; sy = e.screenY; t0 = Date.now(); }, { passive: true });
-  addEventListener('pointercancel', function () { t0 = null; });
+  addEventListener('pointercancel', function () { if (t0 !== null) dbg('pointer cancelled by the browser'); t0 = null; });
   addEventListener('pointerup', function (e) {
     if (e.pointerType !== 'touch' || t0 === null) return;
-    var dx = e.screenX - sx, dy = e.screenY - sy, dt = Date.now() - t0; t0 = null;
-    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.3) { post({ k: dx < 0 ? 'ArrowRight' : 'ArrowLeft' }); return; }
-    if (Math.abs(dx) > 18 || Math.abs(dy) > 18 || dt > 700) return;
-    if (e.target && e.target.closest && e.target.closest('video')) return;
-    var sel = window.getSelection && String(window.getSelection()); if (sel) return;
-    if (e.clientY < 110) post({ ui: 1 });
-    else if (e.clientX < 576) post({ k: 'ArrowLeft' });
-    else post({ k: 'ArrowRight' });
+    var dt = Date.now() - t0, d0 = t0; t0 = null;
+    finish(e.screenX - sx, e.screenY - sy, dt, e.target, e.clientX, e.clientY, 'pointer');
   });
+  addEventListener('touchstart', function (e) { if (e.touches.length !== 1) { tt = null; return; } tx = e.touches[0].screenX; ty = e.touches[0].screenY; tt = Date.now(); }, { passive: true });
+  addEventListener('touchend', function (e) {
+    if (tt === null || !e.changedTouches.length) return;
+    var c = e.changedTouches[0], dt = Date.now() - tt; tt = null;
+    setTimeout(function () { finish(c.screenX - tx, c.screenY - ty, dt, e.target, c.clientX, c.clientY, 'touch'); }, 30);   // after the pointer events, which win
+  }, { passive: true });
+  function reset() { t0 = null; tt = null; }
+  addEventListener('blur', reset); document.addEventListener('visibilitychange', reset);
+  document.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+  document.addEventListener('selectstart', function (e) { e.preventDefault(); });
+  document.addEventListener('dragstart', function (e) { e.preventDefault(); });
 })();
