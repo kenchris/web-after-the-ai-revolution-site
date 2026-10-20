@@ -20,8 +20,12 @@
  #bar i{display:block;height:100%;width:0;background:#3DD9FF;transition:width .2s}
  #hud{position:fixed;right:max(14px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom));font-size:14px;opacity:0;transition:opacity .3s;background:rgba(5,8,15,.8);padding:6px 10px;border-radius:8px;pointer-events:none}
  body.show #hud{opacity:1}
- #ui{position:fixed;top:max(8px,env(safe-area-inset-top));right:max(8px,env(safe-area-inset-right));display:flex;gap:8px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:5}
- body.ui #ui,body.overview #ui{opacity:1;pointer-events:auto}
+ #ui{position:fixed;top:max(8px,env(safe-area-inset-top));right:max(8px,env(safe-area-inset-right));display:flex;gap:8px;z-index:5;transition:opacity .25s}
+ #ui button:not(#b-menu){display:none}
+ body.ui #ui button:not(#b-menu),body.overview #ui button:not(#b-menu){display:inline-block}
+ #b-menu{opacity:.5;font-size:22px;line-height:1;letter-spacing:1px}
+ body.ui #b-menu,body.overview #b-menu{opacity:1}
+ body:not(.coarse):not(.ui):not(.overview) #ui{opacity:0;pointer-events:none}
  #ui button,#rot button{font:600 15px "Segoe UI",system-ui,sans-serif;color:#E6ECF8;background:rgba(18,26,51,.88);border:1px solid #2D3B66;border-radius:12px;min-width:44px;height:44px;padding:0 14px;cursor:pointer}
  #ui button:active,#rot button:active{background:#2D3B66}
  #ui svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vertical-align:middle}
@@ -51,6 +55,7 @@
  <button id="b-next" aria-label="Next slide">&#8250;</button>
  <button id="b-grid" aria-label="All slides"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></button>
  <button id="b-fs" aria-label="Full screen"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+ <button id="b-menu" aria-label="Menu">&#8943;</button>
 </div>
 <div id="rot"><svg viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg>
  <h1>Turn your phone sideways</h1><p>The slides are made for a wide screen. Turn the phone, or go full screen and it will turn by itself.</p>
@@ -60,7 +65,7 @@
 var N=90, cur=1, wrap=document.getElementById('wrap'), f=document.getElementById('f'), stage=document.getElementById('stage'), hud=document.getElementById('hud'), hudT, uiT, noteT, ignoreRot=false;
 var coarse=window.matchMedia&&matchMedia('(pointer:coarse)').matches;
 function pad(n){return (n<10?'0':'')+n}
-function url(n){return 'html/auto/'+pad(n)+'.html'}
+function url(n){return 'html/auto/'+pad(n)+'.html?v=20261020231438'}
 function size(){var vv=window.visualViewport;return [Math.round((vv&&vv.width)||wrap.clientWidth||innerWidth),Math.round((vv&&vv.height)||wrap.clientHeight||innerHeight)]}
 function fit(){var d=size(),w=d[0],h=d[1],s=Math.min(w/1920,h/1080);
  stage.style.transform='translate('+((w-1920*s)/2)+'px,'+((h-1080*s)/2)+'px) scale('+s+')';checkRot()}
@@ -105,6 +110,9 @@ document.getElementById('b-prev').onclick=function(){show(cur-1);ui(true)};
 document.getElementById('b-next').onclick=function(){show(cur+1);ui(true)};
 document.getElementById('b-grid').onclick=function(){overview()};
 document.getElementById('b-fs').onclick=function(){toggleFs()};
+document.getElementById('b-menu').onclick=function(){ui()};
+if(coarse)document.body.classList.add('coarse');
+else addEventListener('mousemove',function(){ui(true)});
 // taps and swipes on the black bars around the slide (the slide itself handles its own), same rules as inside the slide
 (function(){var sx,sy,t0=null;
  addEventListener('pointerdown',function(e){if(e.pointerType!=='touch'||!e.isPrimary)return;if(e.target.closest&&e.target.closest('button,#rot,#grid,#note'))return;sx=e.screenX;sy=e.screenY;t0=Date.now()},{passive:true});
