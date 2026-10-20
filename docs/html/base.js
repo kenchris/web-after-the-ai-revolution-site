@@ -59,9 +59,10 @@
     if (!v) return false;
     if (coarse) v.controls = true;
     var p = v.play(); if (p && p.catch) p.catch(function () {});
+    var alt = function (why) { dbg('full screen refused: ' + why); if (v.webkitEnterFullscreen) { try { v.webkitEnterFullscreen(); dbg('using the phone video player'); } catch (x) { dbg('no full screen possible: ' + x); } } };
     var rq = v.requestFullscreen || v.webkitRequestFullscreen;
-    if (rq) { try { var r = rq.call(v); if (r && r.then) r.then(lockLandscape, function () {}); else lockLandscape(); } catch (x) {} }
-    else if (v.webkitEnterFullscreen) { try { v.webkitEnterFullscreen(); } catch (x) {} }
+    if (rq) { try { var r = rq.call(v); if (r && r.then) r.then(lockLandscape, function (err) { alt(err && err.message || err); }); else lockLandscape(); } catch (x) { alt(x); } }
+    else alt('this browser has no full screen for a video element');
     return true;
   }
   window.__playFull = playFull;
