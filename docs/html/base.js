@@ -69,6 +69,11 @@
     else playFull(v);
   }
   addEventListener('message', function (e) { if (e.data && e.data.cmd === 'video') toggleVideo(); });
+  // when the video ends it leaves full screen by itself and the slide is back (the ended event does not bubble, so listen while capturing)
+  document.addEventListener('ended', function (e) {
+    if (!e.target || e.target.tagName !== 'VIDEO' || !fsEl()) return;
+    var ex = document.exitFullscreen || document.webkitExitFullscreen; if (ex) { try { var r = ex.call(document); if (r && r.catch) r.catch(function () {}); } catch (x) {} }
+  }, true);
   function onFs() { if (!fsEl()) { try { screen.orientation && screen.orientation.unlock && screen.orientation.unlock(); } catch (x) {} } }
   document.addEventListener('fullscreenchange', onFs); document.addEventListener('webkitfullscreenchange', onFs);
   // a tap on the video of a video slide plays it full screen (on a touch screen; with a mouse the video plays in place)
