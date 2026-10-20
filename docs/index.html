@@ -1,31 +1,73 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>The Web After the AI Revolution</title>
+<meta name="theme-color" content="#05080F">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
 <style>
- html,body{margin:0;height:100%;background:#05080F;color:#C9D3E8;font-family:"Segoe UI",system-ui,sans-serif;overflow:hidden}
- #stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:0 0;background:#0B1020}
+ html,body{margin:0;width:100%;height:100%;background:#05080F;color:#C9D3E8;font-family:"Segoe UI",system-ui,sans-serif;overflow:hidden;overscroll-behavior:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+ html,body{position:fixed;inset:0}
+ /* the slide is 1920 wide: it lives in a clipped box so it can never make the page wider than the screen */
+ #wrap{position:fixed;inset:0;overflow:hidden;contain:strict}
+ #stage{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;background:#0B1020}
  #stage iframe{position:absolute;inset:0;width:1920px;height:1080px;border:0;background:#0B1020}
  #bar{position:fixed;left:0;right:0;bottom:0;height:4px;background:#121A33}
  #bar i{display:block;height:100%;width:0;background:#3DD9FF;transition:width .2s}
- #hud{position:fixed;right:14px;bottom:12px;font-size:14px;opacity:0;transition:opacity .3s;background:rgba(5,8,15,.8);padding:6px 10px;border-radius:8px}
+ #hud{position:fixed;right:max(14px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom));font-size:14px;opacity:0;transition:opacity .3s;background:rgba(5,8,15,.8);padding:6px 10px;border-radius:8px;pointer-events:none}
  body.show #hud{opacity:1}
+ #ui{position:fixed;top:max(8px,env(safe-area-inset-top));right:max(8px,env(safe-area-inset-right));display:flex;gap:8px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:5}
+ body.ui #ui,body.overview #ui{opacity:1;pointer-events:auto}
+ #ui button,#rot button{font:600 15px "Segoe UI",system-ui,sans-serif;color:#E6ECF8;background:rgba(18,26,51,.88);border:1px solid #2D3B66;border-radius:12px;min-width:44px;height:44px;padding:0 14px;cursor:pointer}
+ #ui button:active,#rot button:active{background:#2D3B66}
+ #ui svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vertical-align:middle}
+ #rot{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:#05080F;z-index:9;text-align:center;padding:24px;box-sizing:border-box}
+ #rot.on{display:flex}
+ #rot h1{font-size:22px;font-weight:600;margin:0;color:#E6ECF8}
+ #rot p{margin:0;font-size:15px;color:#9FB2D8;max-width:22em;line-height:1.4}
+ #rot .row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+ #rot svg{width:88px;height:88px;stroke:#3DD9FF;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;animation:turn 2.6s ease-in-out infinite}
+ @keyframes turn{0%,20%{transform:rotate(0)}60%,100%{transform:rotate(-90deg)}}
+ #note{position:fixed;left:50%;bottom:max(24px,env(safe-area-inset-bottom));transform:translateX(-50%);max-width:80vw;background:rgba(18,26,51,.95);border:1px solid #2D3B66;border-radius:12px;padding:10px 16px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:8;text-align:center}
+ #note.on{opacity:1}
  #grid{position:fixed;inset:0;background:#05080F;overflow:auto;display:none;padding:24px;box-sizing:border-box}
- body.overview #grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px}
- body.overview #stage{display:none}
+ body.overview #grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr));gap:18px;padding-top:68px}
+ body.overview #wrap{display:none}
  .th{position:relative;aspect-ratio:16/9;overflow:hidden;border-radius:10px;box-shadow:0 0 0 2px #24304F;cursor:pointer;background:#0B1020}
  .th.cur{box-shadow:0 0 0 3px #3DD9FF}
  .th iframe{position:absolute;left:0;top:0;width:1920px;height:1080px;border:0;transform-origin:0 0;pointer-events:none}
  .th b{position:absolute;right:8px;bottom:6px;font-size:13px;background:rgba(5,8,15,.8);padding:2px 7px;border-radius:6px}
 </style></head><body>
-<div id="stage"><iframe id="f" title="slide"></iframe></div>
+<div id="wrap"><div id="stage"><iframe id="f" title="slide" allow="fullscreen" allowfullscreen></iframe></div></div>
 <div id="grid"></div>
 <div id="bar"><i id="p"></i></div>
 <div id="hud"></div>
+<div id="ui">
+ <button id="b-prev" aria-label="Previous slide">&#8249;</button>
+ <button id="b-next" aria-label="Next slide">&#8250;</button>
+ <button id="b-grid" aria-label="All slides"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></button>
+ <button id="b-fs" aria-label="Full screen"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+</div>
+<div id="rot"><svg viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg>
+ <h1>Turn your phone sideways</h1><p>The slides are made for a wide screen. Turn the phone, or go full screen and it will turn by itself.</p>
+ <div class="row"><button id="r-fs">Full screen</button><button id="r-go">Show anyway</button></div></div>
+<div id="note"></div>
 <script>
-var N=90, cur=1, f=document.getElementById('f'), stage=document.getElementById('stage'), hud=document.getElementById('hud'), hudT;
+var N=90, cur=1, wrap=document.getElementById('wrap'), f=document.getElementById('f'), stage=document.getElementById('stage'), hud=document.getElementById('hud'), hudT, uiT, noteT, ignoreRot=false;
+var coarse=window.matchMedia&&matchMedia('(pointer:coarse)').matches;
 function pad(n){return (n<10?'0':'')+n}
 function url(n){return 'html/auto/'+pad(n)+'.html'}
-function fit(){var s=Math.min(innerWidth/1920,innerHeight/1080);stage.style.transform='scale('+s+') translate(-50%,-50%)'}
+function size(){var vv=window.visualViewport;return [Math.round((vv&&vv.width)||wrap.clientWidth||innerWidth),Math.round((vv&&vv.height)||wrap.clientHeight||innerHeight)]}
+function fit(){var d=size(),w=d[0],h=d[1],s=Math.min(w/1920,h/1080);
+ stage.style.transform='translate('+((w-1920*s)/2)+'px,'+((h-1080*s)/2)+'px) scale('+s+')';checkRot()}
+function checkRot(){var d=size(),portrait=d[1]>d[0]*1.1;
+ document.getElementById('rot').classList.toggle('on',portrait&&coarse&&!ignoreRot&&!document.body.classList.contains('overview'))}
+function note(t){var n=document.getElementById('note');n.textContent=t;n.classList.add('on');clearTimeout(noteT);noteT=setTimeout(function(){n.classList.remove('on')},4200)}
+function ui(on){var b=document.body;if(on===undefined)on=!b.classList.contains('ui');b.classList.toggle('ui',on);clearTimeout(uiT);if(on)uiT=setTimeout(function(){b.classList.remove('ui')},3500)}
 function show(n){cur=Math.max(1,Math.min(N,n));f.src=url(cur);document.getElementById('p').style.width=(cur/N*100)+'%';
  history.replaceState(null,'','#'+cur);hud.textContent=cur+' / '+N;document.body.classList.add('show');clearTimeout(hudT);hudT=setTimeout(function(){document.body.classList.remove('show')},1500)}
 function overview(on){var b=document.body,g=document.getElementById('grid');
@@ -33,22 +75,42 @@ function overview(on){var b=document.body,g=document.getElementById('grid');
  if(on){g.innerHTML='';for(var i=1;i<=N;i++){(function(i){var d=document.createElement('div');d.className='th'+(i==cur?' cur':'');
   var fr=document.createElement('iframe');fr.loading='lazy';fr.src=url(i);d.appendChild(fr);var l=document.createElement('b');l.textContent=i;d.appendChild(l);
   d.onclick=function(){overview(false);show(i)};g.appendChild(d)})(i)}
-  b.classList.add('overview');requestAnimationFrame(function(){var th=g.querySelector('.th');var s=th.clientWidth/1920;
+  b.classList.add('overview');checkRot();requestAnimationFrame(function(){var th=g.querySelector('.th');var s=th.clientWidth/1920;
    g.querySelectorAll('iframe').forEach(function(x){x.style.transform='scale('+s+')'});var c=g.querySelector('.cur');c&&c.scrollIntoView({block:'center'})})}
- else b.classList.remove('overview')}
-function onKey(k,e){
+ else{b.classList.remove('overview');checkRot();fit()}}
+function fsEl(){return document.fullscreenElement||document.webkitFullscreenElement}
+function lockLandscape(){try{if(screen.orientation&&screen.orientation.lock)screen.orientation.lock('landscape').catch(function(){})}catch(x){}}
+function enterFs(){var el=document.documentElement,rq=el.requestFullscreen||el.webkitRequestFullscreen;
+ if(!rq){note('This browser has no full screen for web pages. On iPhone, use Share, then Add to Home Screen, and open it from there.');return}
+ try{var r=rq.call(el);if(r&&r.then)r.then(lockLandscape,function(){note('Full screen was not allowed.')});else lockLandscape()}catch(x){note('Full screen was not allowed.')}}
+function exitFs(){var ex=document.exitFullscreen||document.webkitExitFullscreen;if(ex)ex.call(document)}
+function toggleFs(){fsEl()?exitFs():enterFs()}
+function onFsChange(){if(!fsEl()){try{screen.orientation&&screen.orientation.unlock&&screen.orientation.unlock()}catch(x){}}setTimeout(fit,150)}
+document.addEventListener('fullscreenchange',onFsChange);document.addEventListener('webkitfullscreenchange',onFsChange);
+function videoCmd(){try{f.contentWindow.postMessage({cmd:'video'},'*')}catch(x){}}
+function onKey(k,e,shift){
  if(document.body.classList.contains('overview')){if(k==='Escape'||k==='g'||k==='G')overview(false);return}
- if(k==='ArrowRight'||k==='PageDown'||k===' '||k==='Enter'||k==='ArrowDown')show(cur+1);
+ if(k==='Tab')show(cur+(shift?-1:1));
+ else if(k==='ArrowRight'||k==='PageDown'||k===' '||k==='Enter'||k==='ArrowDown')show(cur+1);
  else if(k==='ArrowLeft'||k==='PageUp'||k==='Backspace'||k==='ArrowUp')show(cur-1);
  else if(k==='Home')show(1);else if(k==='End')show(N);
- else if(k==='f'||k==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+ else if(k==='f'||k==='F')toggleFs();
+ else if(k==='v'||k==='V')videoCmd();
  else if(k==='g'||k==='G'||k==='Escape')overview();
  else return;if(e)e.preventDefault()}
-addEventListener('keydown',function(e){onKey(e.key,e)});
-addEventListener('message',function(e){if(e.source===f.contentWindow&&e.data&&typeof e.data.k==='string')onKey(e.data.k)});
-var tx=null;addEventListener('touchstart',function(e){tx=e.touches[0].clientX});
-addEventListener('touchend',function(e){if(tx===null)return;var d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>50)show(cur+(d<0?1:-1));tx=null});
+addEventListener('keydown',function(e){if(e.ctrlKey||e.metaKey||e.altKey)return;onKey(e.key,e,e.shiftKey)});
+addEventListener('message',function(e){if(e.source!==f.contentWindow||!e.data)return;
+ if(typeof e.data.k==='string')onKey(e.data.k,null,!!e.data.shift);else if(e.data.ui)ui()});
+document.getElementById('b-prev').onclick=function(){show(cur-1);ui(true)};
+document.getElementById('b-next').onclick=function(){show(cur+1);ui(true)};
+document.getElementById('b-grid').onclick=function(){overview()};
+document.getElementById('b-fs').onclick=function(){toggleFs()};
+document.getElementById('r-fs').onclick=function(){enterFs()};
+document.getElementById('r-go').onclick=function(){ignoreRot=true;checkRot()};
 f.addEventListener('load',function(){window.focus()});
-addEventListener('resize',fit);fit();
+addEventListener('resize',fit);addEventListener('orientationchange',function(){setTimeout(fit,200)});
+if(window.visualViewport)visualViewport.addEventListener('resize',fit);
+fit();
 show(parseInt(location.hash.slice(1))||1);
+if(coarse)ui(true);
 </script></body></html>
