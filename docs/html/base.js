@@ -57,7 +57,13 @@
   function lockLandscape() { try { if (screen.orientation && screen.orientation.lock) screen.orientation.lock('landscape').catch(function () {}); } catch (x) {} }
   // When the presentation itself is already full screen, the video fills the slide instead of asking for a second full screen,
   // so the presentation never leaves full screen. The player knows (pfs) and a tap outside the video closes it.
-  var pfs = false, viaFull = false;
+  var pfs = false, viaFull = false, warned = false;
+  // half a second before the end the player loads the next slide out of sight, so it shows at once when the video is over
+  document.addEventListener('timeupdate', function (e) {
+    var v = e.target; if (!viaFull || !v || v.tagName !== 'VIDEO' || !(v.duration > 0)) return;
+    if (v.duration - v.currentTime > 0.5) { warned = false; return; }
+    if (!warned) { warned = true; post({ preload: 1 }); }
+  }, true);
   var psty = document.createElement('style');
   psty.textContent = '.vvid.pfs{position:fixed!important;left:0!important;top:0!important;width:1920px!important;height:1080px!important;z-index:99999;border-radius:0!important;object-fit:contain;background:#000}';
   document.head.appendChild(psty);
@@ -85,7 +91,7 @@
   addEventListener('message', function (e) { if (e.data && e.data.cmd === 'video') toggleVideo(); });
   // when the video ends it leaves full screen by itself and the slide is back (the ended event does not bubble, so listen while capturing)
   document.addEventListener('ended', function (e) {
-    if (e.target && e.target.tagName === 'VIDEO' && viaFull) { viaFull = false; setTimeout(function () { post({ k: 'ArrowRight' }); }, 700); }   // a video played full screen ends on the next slide
+    if (e.target && e.target.tagName === 'VIDEO' && viaFull) { viaFull = false; post({ k: 'ArrowRight' }); }   // a video played full screen ends on the next slide (already loaded behind the scenes, see timeupdate)
     if (e.target && e.target.tagName === 'VIDEO' && pfs) { setPfs(e.target, false); return; }
     if (!e.target || e.target.tagName !== 'VIDEO' || !fsEl()) return;
     var ex = document.exitFullscreen || document.webkitExitFullscreen; if (ex) { try { var r = ex.call(document); if (r && r.catch) r.catch(function () {}); } catch (x) {} }
