@@ -73,7 +73,7 @@
 var N=90, cur=1, wrap=document.getElementById('wrap'), f=document.getElementById('f'), stage=document.getElementById('stage'), hud=document.getElementById('hud'), hudT, uiT, noteT, ignoreRot=false;
 var coarse=window.matchMedia&&matchMedia('(pointer:coarse)').matches;
 function pad(n){return (n<10?'0':'')+n}
-function url(n){return 'html/auto/'+pad(n)+'.html?v=20261021100846'}
+function url(n){return 'html/auto/'+pad(n)+'.html?v=20261021101406'}
 function size(){var vv=window.visualViewport;return [Math.round((vv&&vv.width)||wrap.clientWidth||innerWidth),Math.round((vv&&vv.height)||wrap.clientHeight||innerHeight)]}
 function fit(){var d=size(),w=d[0],h=d[1],s=Math.min(w/1920,h/1080);
  stage.style.transform='translate('+((w-1920*s)/2)+'px,'+((h-1080*s)/2)+'px) scale('+s+')';checkRot();if(window.holes)holes()}
