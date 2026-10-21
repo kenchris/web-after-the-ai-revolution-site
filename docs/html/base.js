@@ -68,7 +68,15 @@
   var psty = document.createElement('style');
   psty.textContent = '.vvid.pfs{position:fixed!important;left:0!important;top:0!important;width:1920px!important;height:1080px!important;z-index:99999;border-radius:0!important;object-fit:contain;background:#000}';
   document.head.appendChild(psty);
-  function pageFs() { try { var d = window.parent.document; return !!(d.fullscreenElement || d.webkitFullscreenElement); } catch (x) { return false; } }
+  // full screen by the player's own button, or by the browser (F11, an installed app): the window then fills the whole screen
+  function pageFs() {
+    try {
+      var w = window.parent, d = w.document;
+      if (d.fullscreenElement || d.webkitFullscreenElement) return true;
+      if (w.matchMedia && w.matchMedia('(display-mode: fullscreen)').matches) return true;
+      return w.innerWidth >= screen.width - 1 && w.innerHeight >= screen.height - 1;
+    } catch (x) { return false; }
+  }
   function setPfs(v, on) { pfs = on; v.classList.toggle('pfs', on); post({ pfs: on ? 1 : 0 }); }
   function playFull(v) {
     if (!v) return false;
